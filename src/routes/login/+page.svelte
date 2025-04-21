@@ -1,26 +1,21 @@
 <script>
   import { login } from '$lib/api';
-  import { saveToken } from '$lib/auth';
   import { goto } from '$app/navigation';
 
   let email = '';
   let password = '';
   let error = '';
 
-  // ログイン処理を行う関数
   const handleLogin = async () => {
     try {
-      const token = await login(email, password);
-      saveToken(token);
+      await login(email, password); // ← tokenを返さず、Cookieに保存される前提
       goto('/dashboard');
     } catch (e) {
       error = e.message;
     }
   };
 
-  // google認証のための関数
   const loginWithGoogle = () => {
-    // Spring Boot 側のGoogle認証開始エンドポイントへリダイレクト
     window.location.href = 'http://localhost:8080/api/auth/google/login';
   };
 </script>

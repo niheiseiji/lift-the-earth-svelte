@@ -1,32 +1,29 @@
 <script>
   import { onMount } from 'svelte';
-  import { getToken, logout } from '$lib/auth';
-  import { fetchMe } from '$lib/api';
+  import { fetchMe, logout } from '$lib/api';
   import { goto } from '$app/navigation';
 
   let user = null;
   let error = '';
 
   onMount(async () => {
-    const token = getToken();
-    if (!token) {
-      goto('/login');
-      return;
-    }
-
     try {
-      user = await fetchMe();
+      user = await fetchMe(); // credentials: 'include' 付きでCookie送信
     } catch (e) {
       error = e.message;
-      logout(); // トークン無効時は強制ログアウト
+      await logout();
       goto('/login');
     }
   });
 
-  function handleLogout() {
-    logout();
+  const handleLogout = async () => {
+    try {
+      await logout(); // サーバ側でCookie削除
+    } catch (e) {
+      alert(e.message);
+    }
     goto('/login');
-  }
+  };
 </script>
 
 <h1>ダッシュボード</h1>
