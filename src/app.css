@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+
+/* @import '@skeletonlabs/skeleton'; */
+/* @import '@skeletonlabs/skeleton/optional/presets'; */
+@import '@skeletonlabs/skeleton/themes/cerberus';
+
+/* @source '../node_modules/@skeletonlabs/skeleton-svelte/dist'; */
+
+/* Register a Custom Themes */
+/* Make sure to resolve the relative path. */
+/* Note the .css extension is optional. */
+@import './lib/themes/my-theme.css';
