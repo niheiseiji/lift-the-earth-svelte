@@ -9,4 +9,5 @@
 /* Register a Custom Themes */
 /* Make sure to resolve the relative path. */
 /* Note the .css extension is optional. */
+/* TODO: 効いていない */
 @import './lib/themes/my-theme.css';
