@@ -1,6 +1,8 @@
 <script>
   import { ChevronDown, CircleUser } from 'lucide-svelte';
 
+  export let showRight = true;
+
   let showDropdown = false;
 
   const toggleDropdown = () => {
@@ -22,47 +24,15 @@
         </a>
       </div>
     </div>
-    <div class="flex px-2 py-2">
-      <!-- ドロップダウンボタン -->
-      <button
-        id="dropdownDefaultButton"
-        type="button"
-        class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded text-sm px-3 py-1.5 inline-flex items-center h-[35px]"
-        on:click={toggleDropdown}
-      >
-        プリセット設定
-        <span class="w-px h-4 mx-2 bg-white/50"></span>
-        <ChevronDown class="w-4 h-4" />
-      </button>
 
-      <!-- ドロップダウンメニュー -->
-      {#if showDropdown}
-        <div
-          id="dropdown"
-          class="absolute right-14 mt-[42px] z-10 w-44 bg-gray-100 divide-y divide-gray-100 rounded-lg"
-        >
-          <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownDefaultButton">
-            <li>
-              <button
-                class="w-full text-left px-4 py-2 hover:bg-gray-300"
-                on:click={() => handleSelect('プリセットに登録')}
-              >
-                現在のメニューを登録
-              </button>
-            </li>
-            <li>
-              <button
-                class="w-full text-left px-4 py-2 hover:bg-gray-300"
-                on:click={() => handleSelect('プリセットからロード')}
-              >
-                プリセットからロード
-              </button>
-            </li>
-          </ul>
-        </div>
-      {/if}
-
-      <CircleUser size={32} class="text-gray-500 mt-0.5 ml-2" />
-    </div>
+    <!-- 右上ボタン＆アイコン（条件付き） -->
+    {#if showRight}
+      <div class="flex relative px-2 py-2">
+        <!-- ドロップダウン -->
+        <slot name="dropdown" />
+        <!-- ユーザーアイコン -->
+        <slot name="user" />
+      </div>
+    {/if}
   </div>
 </header>
