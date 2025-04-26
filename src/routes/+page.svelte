@@ -3,8 +3,8 @@
   import { user } from '$lib/stores/user';
   import { goto } from '$app/navigation';
 
-  const goToInput = () => {
-    goto('/input');
+  const goToTraining = () => {
+    goto('/training');
   };
 </script>
 
@@ -20,8 +20,8 @@
 {/if}
 
 <button
-  class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
-  on:click={goToInput}
+  class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-2 inline-flex items-center h-[35px]"
+  on:click={goToTraining}
 >
-  go to input
+  トレーニング開始💪
 </button>
