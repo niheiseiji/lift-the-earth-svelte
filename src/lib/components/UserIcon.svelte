@@ -41,7 +41,7 @@
 
 <div class="relative" bind:this={dropdownRef}>
   <button on:click={toggleDropdown}>
-    <CircleUser size={30} class="text-gray-500 cursor-pointer translate-y-[2px]" />
+    <CircleUser size={30} class="text-gray-500 cursor-pointer translate-y-[3px]" />
   </button>
 
   {#if showDropdown}

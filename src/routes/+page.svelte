@@ -4,7 +4,7 @@
   import { goto } from '$app/navigation';
 
   const goToTraining = () => {
-    goto('/training');
+    goto('/training/new');
   };
 </script>
 
@@ -23,5 +23,5 @@
   class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-2 inline-flex items-center h-[35px]"
   on:click={goToTraining}
 >
-  トレーニング開始💪
+  トレーニング開始🏋️‍♀️
 </button>

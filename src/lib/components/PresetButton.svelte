@@ -29,10 +29,10 @@
 <div class="relative" bind:this={dropdownRef}>
   <button
     on:click={toggleDropdown}
-    class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
+    class="border border-blue-700 text-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
   >
-    <span> プリセット設定 </span>
-    <span class="w-px h-4 ml-2 bg-white/50"></span>
+    <span>プリセット</span>
+    <span class="w-px h-4 ml-2 bg-blue-700"></span>
     <ChevronDown class="w-4 h-4 ml-2" />
   </button>
 
