@@ -1,5 +1,5 @@
 <script>
-  import { login } from '$lib/api';
+  import { signup } from '$lib/api';
   import { goto } from '$app/navigation';
   import { Header } from '$lib/components';
 
@@ -7,9 +7,9 @@
   let password = '';
   let error = '';
 
-  const handleLogin = async () => {
+  const handleSignup = async () => {
     try {
-      await login(email, password);
+      await signup(email, password);
       goto('/');
     } catch (e) {
       error = e.message;
@@ -27,7 +27,7 @@
 <!-- form contents -->
 <div class="flex min-h-full flex-col justify-center px-6 py-8 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-    <h2 class="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">ログイン</h2>
+    <h2 class="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">サインアップ</h2>
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -35,10 +35,11 @@
       <p class="text-red-600 text-sm text-center mb-4">{error}</p>
     {/if}
 
-    <form class="space-y-6" on:submit|preventDefault={handleLogin}>
+    <form class="space-y-6" on:submit|preventDefault={handleSignup}>
       <div>
         <label for="email" class="block text-sm font-medium text-gray-900">メールアドレス</label>
         <div class="mt-2">
+          <!-- TODO: メアド重複などのエラーハンドリング -->
           <!-- TODO: 自動入力するとダークモードのカラーになる -->
           <input
             id="email"
@@ -54,6 +55,7 @@
       <div>
         <label for="password" class="block text-sm font-medium text-gray-900">パスワード</label>
         <div class="mt-2">
+          <!-- TODO: 確認用の入力を実装する -->
           <input
             id="password"
             type="password"
@@ -70,18 +72,18 @@
           type="submit"
           class="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
-          ログイン
+          サインアップ
         </button>
       </div>
     </form>
-    <p class="mt-10 text-center text-sm/6 text-gray-500">
-      <a href="/signup" class="font-semibold text-blue-600 hover:text-blue-500"
-        >新規アカウント登録はこちら
-      </a>
+
+    <p class="mt-10 text-center text-sm text-gray-500">
+      すでにアカウントをお持ちですか？
+      <a href="/login" class="font-semibold text-blue-600 hover:text-blue-500">ログイン</a>
     </p>
 
     <div class="mt-6 text-center">
-      <h3 class="text-sm text-gray-500 mb-2">別の方法でログイン</h3>
+      <h3 class="text-sm text-gray-500 mb-2">別の方法で登録</h3>
       <button
         on:click={loginWithGoogle}
         class="w-full flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50"
@@ -104,7 +106,7 @@
             d="M272 107.7c39.9 0 75.9 13.8 104.2 40.7l78.1-78.1C406.7 24.2 345.3 0 272 0 166.5 0 73.9 59.9 29.1 149.3l89.7 70.6C140.4 155.7 200.8 107.7 272 107.7z"
           />
         </svg>
-        Googleでログイン
+        Googleで続ける
       </button>
     </div>
   </div>

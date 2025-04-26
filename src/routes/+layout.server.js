@@ -1,12 +1,10 @@
-// src/routes/+layout.server.js
-
 import { serverFetchMe } from '$lib/api';
 import { redirect } from '@sveltejs/kit';
 
 export async function load({ fetch, cookies, url }) {
   const path = url.pathname;
 
-  if (path.startsWith('/login')) {
+  if (path.startsWith('/login') || path.startsWith('/signup')) {
     return {};
   }
 

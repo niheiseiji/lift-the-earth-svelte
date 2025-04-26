@@ -6,6 +6,25 @@ const BASE_URL = 'http://localhost:8080/api';
  * @param {string} password
  * @returns {Promise<string>} JWTトークン
  */
+export const signup = async (email, password) => {
+  const res = await fetch(`${BASE_URL}/auth/signup`, {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include'
+  });
+
+  if (!res.ok) {
+    throw new Error('ログインに失敗しました');
+  }
+};
+
+/**
+ * ログインAPIを呼び出します
+ * @param {string} email
+ * @param {string} password
+ * @returns {Promise<string>} JWTトークン
+ */
 export const login = async (email, password) => {
   const res = await fetch(`${BASE_URL}/auth/login`, {
     method: 'POST',
