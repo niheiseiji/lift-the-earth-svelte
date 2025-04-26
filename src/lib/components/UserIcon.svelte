@@ -1,5 +1,62 @@
 <script>
+  import { onMount } from 'svelte';
   import { CircleUser } from 'lucide-svelte';
+  import { logout } from '$lib/api';
+  import { goto } from '$app/navigation';
+  import { user } from '$lib/stores/user';
+
+  let showDropdown = false;
+  let dropdownRef;
+
+  const handleLogout = async () => {
+    try {
+      await logout(); // サーバ側でCookie削除
+    } catch (e) {
+      alert(e.message);
+    }
+    goto('/login');
+  };
+
+  const toggleDropdown = () => {
+    showDropdown = !showDropdown;
+  };
+
+  const handleSelect = (action) => {
+    console.log(`${action} clicked`);
+    showDropdown = false;
+    handleLogout();
+  };
+
+  const handleClickOutside = (event) => {
+    if (!dropdownRef?.contains(event.target)) {
+      showDropdown = false;
+    }
+  };
+
+  onMount(() => {
+    window.addEventListener('click', handleClickOutside);
+    return () => window.removeEventListener('click', handleClickOutside);
+  });
 </script>
 
-<CircleUser size={32} class="text-gray-500 cursor-pointer" />
+<div class="relative" bind:this={dropdownRef}>
+  <button on:click={toggleDropdown}>
+    <CircleUser size={30} class="text-gray-500 cursor-pointer translate-y-[2px]" />
+  </button>
+
+  {#if showDropdown}
+    <div class="absolute text-gray-700 top-full right-0 mt-2 z-10 w-44 bg-gray-100 rounded shadow">
+      <div class="px-4 py-3 text-sm">
+        <div>#TODO</div>
+        <div class="font-medium truncate">{$user.email}</div>
+      </div>
+      <ul class="py-2 text-sm">
+        <li>
+          <button class="w-full text-left px-4 py-2" on:click={() => handleSelect('logout')}
+            >ログアウト</button
+          >
+        </li>
+      </ul>
+    </div>
+  {/if}
+</div>

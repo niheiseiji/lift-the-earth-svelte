@@ -7,7 +7,7 @@ const BASE_URL = 'http://localhost:8080/api';
  * @returns {Promise<string>} JWTトークン
  */
 export const login = async (email, password) => {
-  const res = await fetch('http://localhost:8080/api/auth/login', {
+  const res = await fetch(`${BASE_URL}/auth/login`, {
     method: 'POST',
     body: JSON.stringify({ email, password }),
     headers: { 'Content-Type': 'application/json' },
@@ -32,6 +32,20 @@ export const fetchMe = async () => {
     throw new Error('トークンが無効、または期限切れです');
   }
 
+  return await res.json();
+};
+
+/**
+ * JWTを使って現在のユーザー情報を取得
+ * @returns {Promise<{id: number, email: string, createdAt: string}>}
+ */
+export const serverFetchMe = async ({ fetch }) => {
+  const res = await fetch(`${BASE_URL}/auth/me`, {
+    credentials: 'include'
+  });
+  if (!res.ok) {
+    throw new Error('認証エラー');
+  }
   return await res.json();
 };
 

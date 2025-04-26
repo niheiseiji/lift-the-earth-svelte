@@ -1,6 +1,9 @@
 <script>
+  import { onMount } from 'svelte';
   import { ChevronDown } from 'lucide-svelte';
+
   let showDropdown = false;
+  let dropdownRef;
 
   const toggleDropdown = () => {
     showDropdown = !showDropdown;
@@ -10,12 +13,23 @@
     console.log(`${action} clicked`);
     showDropdown = false;
   };
+
+  const handleClickOutside = (event) => {
+    if (!dropdownRef?.contains(event.target)) {
+      showDropdown = false;
+    }
+  };
+
+  onMount(() => {
+    window.addEventListener('click', handleClickOutside);
+    return () => window.removeEventListener('click', handleClickOutside);
+  });
 </script>
 
-<div class="relative">
+<div class="relative" bind:this={dropdownRef}>
   <button
     on:click={toggleDropdown}
-    class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 py-1.5 inline-flex items-center h-[35px]"
+    class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
   >
     <span> プリセット設定 </span>
     <span class="w-px h-4 ml-2 bg-white/50"></span>
