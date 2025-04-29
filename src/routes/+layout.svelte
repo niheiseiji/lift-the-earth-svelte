@@ -5,10 +5,9 @@
 
   export let data;
 
-  onMount(() => {
-    console.log('User data:', data.user);
+  $: {
     userStore.set(data.user);
-  });
+  }
 </script>
 
 <div data-theme="mytheme" class="min-h-screen bg-white text-foreground">

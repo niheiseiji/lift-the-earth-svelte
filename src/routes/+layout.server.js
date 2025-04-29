@@ -2,6 +2,8 @@ import { serverFetchMe } from '$lib/api';
 import { redirect } from '@sveltejs/kit';
 
 export async function load({ fetch, cookies, url }) {
+  console.log('🍪 JWT cookie:', cookies.get('jwt'));
+
   const path = url.pathname;
 
   if (path.startsWith('/login') || path.startsWith('/signup')) {

@@ -59,9 +59,14 @@ export const fetchMe = async () => {
  * @returns {Promise<{id: number, email: string, createdAt: string}>}
  */
 export const serverFetchMe = async ({ fetch }) => {
+  console.log('###start serverFetchMe###');
+
   const res = await fetch(`${BASE_URL}/auth/me`, {
     credentials: 'include'
   });
+
+  console.log('###start serverFetchMe fetch end###');
+
   if (!res.ok) {
     throw new Error('認証エラー');
   }
