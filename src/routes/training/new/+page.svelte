@@ -8,6 +8,8 @@
 
   const createSets = (count) => Array.from({ length: count }, () => ({ reps: '', weight: '' }));
 
+  // TODO: 新規登録画面のメニュー表示優先順位 1:優先プリセット登録値 2:デフォルト値
+  // デフォルト値
   let menus = [
     { id: '1', name: 'ベンチプレス', sets: createSets(setCount) },
     { id: '2', name: '', sets: createSets(setCount) },
