@@ -29,7 +29,7 @@
 <div class="relative" bind:this={dropdownRef}>
   <button
     on:click={toggleDropdown}
-    class="border border-blue-700 text-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
+    class="border border-blue-700 text-blue-700 hover:bg-blue-200 rounded text-sm px-3 inline-flex items-center h-[35px]"
   >
     <span>プリセット</span>
     <span class="w-px h-4 ml-2 bg-blue-700"></span>

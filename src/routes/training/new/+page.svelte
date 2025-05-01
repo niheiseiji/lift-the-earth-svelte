@@ -3,13 +3,18 @@
   import { Header, UserIcon, PresetButton, SaveButton } from '$lib/components';
   import { Menu } from 'lucide-svelte';
 
+  const setCount = 5;
+  const menuCount = 6;
+
+  const createSets = (count) => Array.from({ length: count }, () => ({ reps: '', weight: '' }));
+
   let menus = [
-    { id: '1', name: 'ベンチプレス', count: 5 },
-    { id: '2', name: '', count: 5 },
-    { id: '3', name: '', count: 5 },
-    { id: '4', name: '', count: 5 },
-    { id: '5', name: '', count: 5 },
-    { id: '6', name: '', count: 5 }
+    { id: '1', name: 'ベンチプレス', sets: createSets(setCount) },
+    { id: '2', name: '', sets: createSets(setCount) },
+    { id: '3', name: '', sets: createSets(setCount) },
+    { id: '4', name: '', sets: createSets(setCount) },
+    { id: '5', name: '', sets: createSets(setCount) },
+    { id: '6', name: '', sets: createSets(setCount) }
   ];
 
   const handleDndConsider = (event) => {
@@ -48,15 +53,17 @@
         </div>
 
         <div class="grid grid-cols-5 gap-2">
-          {#each Array(menu.count).fill('') as _, i (i)}
+          {#each menu.sets as set, index}
             <div class="bg-gray-100 rounded h-20 flex flex-col justify-center items-center">
               <input
                 type="number"
+                bind:value={set.reps}
                 class="w-full text-center bg-transparent border-none focus:outline-none text-gray-700 text-sm"
               />
               <hr class="w-2/3 border-gray-300 my-1" />
               <input
                 type="number"
+                bind:value={set.weight}
                 class="w-full text-center bg-transparent border-none focus:outline-none text-gray-700 text-sm"
               />
             </div>
