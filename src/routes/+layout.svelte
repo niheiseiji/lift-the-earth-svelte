@@ -17,6 +17,6 @@
   });
 </script>
 
-<div data-theme="mytheme" class="min-h-screen bg-white text-foreground">
+<div class="min-h-screen text-foreground">
   <slot />
 </div>

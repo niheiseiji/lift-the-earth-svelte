@@ -44,7 +44,7 @@
     class="flex flex-col items-center gap-2 mx-1"
   >
     {#each menus as menu (menu.id)}
-      <div class="rounded border p-2 bg-white shadow-sm w-full max-w-md">
+      <div class="rounded border border-gray-200 p-2 bg-white shadow-sm w-full max-w-md">
         <div class="flex items-center gap-1 text-gray-700 text-sm mb-1">
           <Menu size={18} />
           <input
