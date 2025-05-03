@@ -54,7 +54,7 @@ export const logout = async () => {
 
 /**
  * 現在のユーザー情報を取得
- * @returns {Promise<{id: number, email: string, userName: string, createdAt: string}>}
+ * @returns {Promise<{id: number, email: string, name: string, createdAt: string}>}
  */
 export const fetchMe = async () => {
   const res = await fetch(`${BASE_URL}/user/me`, {
@@ -66,4 +66,23 @@ export const fetchMe = async () => {
   }
 
   return await res.json();
+};
+
+/**
+ * ユーザー名を更新
+ * @param {string} name
+ */
+export const updateUserName = async (name) => {
+  const res = await fetch(`${BASE_URL}/user/setting`, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name })
+  });
+
+  if (!res.ok) {
+    throw new Error('ユーザー名の更新に失敗しました');
+  }
 };
