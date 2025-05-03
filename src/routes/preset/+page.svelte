@@ -8,8 +8,8 @@
     <UserIcon />
   </div>
 </Header>
-<h1 class="text-2xl font-bold text-center text-black">(実装中)プリセット管理</h1>
+<h1 class="text-2xl font-bold text-center ">(実装中)プリセット管理</h1>
 {#if $user}
-  <div class="text-black">ID:{$user.id}</div>
-  <div class="text-black">MAIL:{$user.email}</div>
+  <div class="">ID:{$user.id}</div>
+  <div class="">MAIL:{$user.email}</div>
 {/if}

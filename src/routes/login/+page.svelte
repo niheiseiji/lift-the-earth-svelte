@@ -39,7 +39,6 @@
       <div>
         <label for="email" class="block text-sm font-medium text-gray-900">メールアドレス</label>
         <div class="mt-2">
-          <!-- TODO: 自動入力するとダークモードのカラーになる -->
           <input
             id="email"
             type="email"

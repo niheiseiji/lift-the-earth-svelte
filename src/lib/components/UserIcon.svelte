@@ -18,7 +18,7 @@
   };
 
   const handleUserSetting = async () => {
-    goto('/user-setting');
+    goto('/profile');
   };
 
   const handlePreset = async () => {
@@ -55,9 +55,10 @@
   {#if showDropdown}
     <div class="absolute text-gray-700 top-full right-0 mt-2 z-10 w-44 bg-gray-100 rounded shadow">
       <div class="px-4 py-3 text-sm">
-        <div>#TODO</div>
+        <div class="font-medium truncate">{$user.name}</div>
         <div class="font-medium truncate">{$user.email}</div>
       </div>
+      <hr class="mx-2 border border-gray-300" />
       <ul class="py-2 text-sm">
         <li>
           <button class="w-full text-left px-4 py-2" on:click={() => handlePreset()}

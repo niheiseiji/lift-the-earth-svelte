@@ -15,8 +15,8 @@
 </Header>
 
 {#if $user}
-  <div class="text-black">ID:{$user.id}</div>
-  <div class="text-black">MAIL:{$user.email}</div>
+  <div class="">ID:{$user.id}</div>
+  <div class="">MAIL:{$user.email}</div>
 {/if}
 
 <button
