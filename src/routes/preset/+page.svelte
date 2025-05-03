@@ -1,0 +1,15 @@
+<script>
+  import { Header, UserIcon } from '$lib/components';
+  import { user } from '$lib/stores/user';
+</script>
+
+<Header>
+  <div slot="right" class="flex items-center gap-2">
+    <UserIcon />
+  </div>
+</Header>
+<h1 class="text-2xl font-bold text-center text-black">(実装中)プリセット管理</h1>
+{#if $user}
+  <div class="text-black">ID:{$user.id}</div>
+  <div class="text-black">MAIL:{$user.email}</div>
+{/if}

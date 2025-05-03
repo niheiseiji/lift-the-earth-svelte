@@ -39,41 +39,6 @@ export const login = async (email, password) => {
 };
 
 /**
- * JWTを使って現在のユーザー情報を取得
- * @returns {Promise<{id: number, email: string, createdAt: string}>}
- */
-export const fetchMe = async () => {
-  const res = await fetch(`${BASE_URL}/auth/me`, {
-    credentials: 'include' // ← Cookieを送る
-  });
-
-  if (!res.ok) {
-    throw new Error('トークンが無効、または期限切れです');
-  }
-
-  return await res.json();
-};
-
-/**
- * JWTを使って現在のユーザー情報を取得
- * @returns {Promise<{id: number, email: string, createdAt: string}>}
- */
-export const serverFetchMe = async ({ fetch }) => {
-  console.log('###start serverFetchMe###');
-
-  const res = await fetch(`${BASE_URL}/auth/me`, {
-    credentials: 'include'
-  });
-
-  console.log('###start serverFetchMe fetch end###');
-
-  if (!res.ok) {
-    throw new Error('認証エラー');
-  }
-  return await res.json();
-};
-
-/**
  * ログアウトAPI呼び出し
  */
 export const logout = async () => {
@@ -85,4 +50,20 @@ export const logout = async () => {
   if (!res.ok) {
     throw new Error('ログアウトに失敗しました');
   }
+};
+
+/**
+ * 現在のユーザー情報を取得
+ * @returns {Promise<{id: number, email: string, userName: string, createdAt: string}>}
+ */
+export const fetchMe = async () => {
+  const res = await fetch(`${BASE_URL}/user/me`, {
+    credentials: 'include'
+  });
+
+  if (!res.ok) {
+    throw new Error('トークンが無効、または期限切れです');
+  }
+
+  return await res.json();
 };

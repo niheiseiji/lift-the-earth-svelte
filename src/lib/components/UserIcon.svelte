@@ -17,6 +17,14 @@
     goto('/login');
   };
 
+  const handleUserSetting = async () => {
+    goto('/user-setting');
+  };
+
+  const handlePreset = async () => {
+    goto('/preset');
+  };
+
   const toggleDropdown = () => {
     showDropdown = !showDropdown;
   };
@@ -51,6 +59,16 @@
         <div class="font-medium truncate">{$user.email}</div>
       </div>
       <ul class="py-2 text-sm">
+        <li>
+          <button class="w-full text-left px-4 py-2" on:click={() => handlePreset()}
+            >プリセット</button
+          >
+        </li>
+        <li>
+          <button class="w-full text-left px-4 py-2" on:click={() => handleUserSetting()}
+            >プロフィール</button
+          >
+        </li>
         <li>
           <button class="w-full text-left px-4 py-2" on:click={() => handleSelect('logout')}
             >ログアウト</button
