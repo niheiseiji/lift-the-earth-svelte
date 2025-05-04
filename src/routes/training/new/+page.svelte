@@ -1,7 +1,9 @@
 <script>
   import { dndzone } from 'svelte-dnd-action';
-  import { Header, UserIcon, PresetButton, SaveButton } from '$lib/components';
+  import { Header, UserIcon, PresetButton } from '$lib/components';
   import { Menu } from 'lucide-svelte';
+  import { createTraining } from '$lib/api.js';
+  import { goto } from '$app/navigation';
 
   const setCount = 5;
   const menuCount = 6;
@@ -26,12 +28,42 @@
   const handleDndFinalize = (event) => {
     menus = event.detail.items;
   };
+
+  const saveTraining = async () => {
+    const body = {
+      performedAt: new Date().toISOString(),
+      trainingMenus: menus.map((menu, i) => ({
+        displayOrder: i + 1,
+        name: menu.name,
+        sets: menu.sets.map((set, j) => ({
+          setOrder: j + 1,
+          reps: Number(set.reps),
+          weight: Number(set.weight)
+        }))
+      }))
+    };
+
+    try {
+      const data = await createTraining(body);
+      goto('/?saved=1');
+    } catch (err) {
+      console.error(err);
+      alert('保存に失敗しました');
+    }
+  };
 </script>
 
 <Header>
   <div slot="right" class="flex items-center gap-4">
     <PresetButton />
-    <SaveButton />
+    <div class="relative">
+      <button
+        on:click={saveTraining}
+        class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
+      >
+        <span>完了💪</span>
+      </button>
+    </div>
     <UserIcon />
   </div>
 </Header>

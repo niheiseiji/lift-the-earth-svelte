@@ -86,3 +86,25 @@ export const updateUserName = async (name) => {
     throw new Error('ユーザー名の更新に失敗しました');
   }
 };
+
+/**
+ * トレーニングを新規登録する
+ * @param {{ performedAt: string, trainingMenus: Array }} trainingData
+ * @returns {Promise<any>}
+ */
+export const createTraining = async (trainingData) => {
+  const res = await fetch(`${BASE_URL}/trainings`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(trainingData)
+  });
+
+  if (!res.ok) {
+    throw new Error('トレーニングの保存に失敗しました');
+  }
+
+  return await res.json();
+};
