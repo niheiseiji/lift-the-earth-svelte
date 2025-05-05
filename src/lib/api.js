@@ -180,3 +180,19 @@ export const deleteTraining = async (id) => {
     throw new Error('トレーニングの削除に失敗しました');
   }
 };
+
+/**
+ * トレーニングサマリを取得する
+ * @returns {Promise<TrainingSummaryDto>}
+ */
+export const fetchTrainingSummary = async () => {
+  const res = await fetch(`${BASE_URL}/trainings/summary`, {
+    credentials: 'include'
+  });
+
+  if (!res.ok) {
+    throw new Error('トレーニングサマリの取得に失敗しました');
+  }
+
+  return await res.json();
+};

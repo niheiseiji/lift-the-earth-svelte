@@ -3,13 +3,16 @@
   import { user } from '$lib/stores/user';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
-  import { fetchTrainings } from '$lib/api';
+  import { fetchTrainings, fetchTrainingSummary } from '$lib/api';
   import { formatDate } from '$lib/utils/formatDate';
+  import { CircleHelp } from 'lucide-svelte';
 
   // 保存完了メッセージを表示するか
   let showSavedMessage = false;
   // トレーニング一覧
   let trainings = [];
+  // トレーニングサマリ
+  let trainingSummary;
   // 今日はトレーニング登録済みか
   let isTodayRegistered = false;
   // タブ'you' or 'group'
@@ -26,6 +29,7 @@
     }
 
     trainings = await fetchTrainings();
+    trainingSummary = await fetchTrainingSummary();
     isTodayRegistered = trainings.some(
       (t) => t.performedAt.slice(0, 10) === new Date().toISOString().slice(0, 10)
     );
@@ -89,12 +93,67 @@
 </div>
 
 {#if selectedTab === 'you'}
-  <div class="flex min-h-full flex-col justify-center px-2 py-2 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <!-- data -->
-      <!-- TODO: 実装 -->
-      <!-- big3 -->
-      <!-- TODO: 実装 -->
+  <div class="flex min-h-full flex-col justify-center px-2 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md space-y-1">
+      <!-- データカード -->
+      <div class="rounded border border-gray-200 p-4 bg-white w-full">
+        <div class="flex justify-between items-start">
+          <div class="text-sm space-y-1">
+            <div class="flex items-center gap-1">
+              <h2 class="font-bold">データ</h2>
+            </div>
+            <div class="flex justify-between w-40">
+              <span>総リフト重量</span>
+              <span>{(trainingSummary?.totalLiftedWeightKg / 1000).toFixed(1)}t</span>
+            </div>
+            <div>トレーニング回数</div>
+            <div class="space-y-1">
+              <div class="flex justify-between w-40">
+                <span>・直近7日間</span><span>{trainingSummary?.trainingsLast7Days}回</span>
+              </div>
+              <div class="flex justify-between w-40">
+                <span>・直近30日間</span><span>{trainingSummary?.trainingsLast30Days}回</span>
+              </div>
+              <div class="flex justify-between w-40">
+                <span>・全期間</span><span>{trainingSummary?.totalTrainings}回</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="flex flex-col items-center justify-center rounded px-4 py-2 text-center">
+            TBD
+          </div> -->
+        </div>
+      </div>
+
+      <!-- BIG3カード -->
+      <div class="rounded border border-gray-200 p-4 bg-white w-full">
+        <div class="flex justify-between items-start">
+          <div class="text-sm space-y-1">
+            <div class="flex items-center gap-1">
+              <h2 class="font-bold">BIG3</h2>
+              <span class="text-gray-400 text-xs"><CircleHelp size={14} /></span>
+            </div>
+            <div class="flex justify-between w-40">
+              <span>ベンチプレス</span><span>{trainingSummary?.maxBenchPress}kg</span>
+            </div>
+            <div class="flex justify-between w-40">
+              <span>デッドリフト</span><span>{trainingSummary?.maxDeadlift}kg</span>
+            </div>
+            <div class="flex justify-between w-40">
+              <span>スクワット</span><span>{trainingSummary?.maxSquat}kg</span>
+            </div>
+          </div>
+          <div
+            class="mt-2 w-22 flex flex-col items-center justify-center rounded bg-gray-100 px-4 py-2 text-center"
+          >
+            <span class="text-xs text-gray-500">TOTAL</span>
+            <span class="text-2xl font-bold">{trainingSummary?.big3TotalWeight}</span>
+            <span class="text-xs text-gray-500">kg</span>
+          </div>
+        </div>
+      </div>
+
       <!-- current training & start btn -->
       <div class="rounded border border-gray-200 p-2 bg-white w-full">
         <!-- ヘッダー -->
