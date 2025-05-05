@@ -4,6 +4,7 @@
   import { Menu, ArrowLeft } from 'lucide-svelte';
   import { createTraining } from '$lib/api.js';
   import { goto } from '$app/navigation';
+  import { filterEmptyMenus } from '$lib/utils/filterEmptyMenus.js';
 
   const setCount = 5;
   const menuCount = 6;
@@ -32,7 +33,7 @@
   const saveTraining = async () => {
     const body = {
       performedAt: new Date().toISOString(),
-      trainingMenus: menus.map((menu, i) => ({
+      trainingMenus: filterEmptyMenus(menus).map((menu, i) => ({
         displayOrder: i + 1,
         name: menu.name,
         sets: menu.sets.map((set, j) => ({
