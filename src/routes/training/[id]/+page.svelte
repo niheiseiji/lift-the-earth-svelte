@@ -6,17 +6,31 @@
   import { goto } from '$app/navigation';
   import { filterEmptyMenus } from '$lib/utils/filterEmptyMenus.js';
   import { setCount, menuCount, createSets } from '$lib/utils/trainingForm';
+  import { onMount } from 'svelte';
+  import { page } from '$app/stores';
+  import { fetchTrainingById, updateTraining } from '$lib/api.js';
+
+  let id;
 
   // TODO: 新規登録画面のメニュー表示優先順位 1:優先プリセット登録値 2:デフォルト値
   // デフォルト値
-  let menus = [
-    { id: '1', name: 'ベンチプレス', sets: createSets(setCount) },
-    { id: '2', name: '', sets: createSets(setCount) },
-    { id: '3', name: '', sets: createSets(setCount) },
-    { id: '4', name: '', sets: createSets(setCount) },
-    { id: '5', name: '', sets: createSets(setCount) },
-    { id: '6', name: '', sets: createSets(setCount) }
-  ];
+  let menus = [];
+
+  onMount(async () => {
+    id = $page.params.id;
+    const training = await fetchTrainingById(id);
+    menus = Array.from({ length: 6 }, (_, i) => {
+      const m = training.trainingMenus[i] || {};
+      return {
+        id: m.id || `${i + 1}`,
+        name: m.name || '',
+        sets: createSets(setCount).map((_, j) => ({
+          reps: m.sets?.[j]?.reps ?? '',
+          weight: m.sets?.[j]?.weight ?? ''
+        }))
+      };
+    });
+  });
 
   const handleDndConsider = (event) => {
     menus = event.detail.items;
@@ -26,7 +40,7 @@
     menus = event.detail.items;
   };
 
-  const saveTraining = async () => {
+  const update = async () => {
     const body = {
       performedAt: new Date().toISOString(),
       trainingMenus: filterEmptyMenus(menus).map((menu, i) => ({
@@ -41,8 +55,8 @@
     };
 
     try {
-      const data = await createTraining(body);
-      goto('/?saved=1');
+      await updateTraining(id, body);
+      goto('/?update=1');
     } catch (err) {
       console.error(err);
       alert('保存に失敗しました');
@@ -59,7 +73,7 @@
   <div slot="right" class="flex items-center gap-4">
     <PresetButton />
     <button
-      on:click={saveTraining}
+      on:click={update}
       class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
     >
       <span>完了💪</span>

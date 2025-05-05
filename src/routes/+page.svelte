@@ -27,6 +27,10 @@
   const goToTraining = () => {
     goto('/training/new');
   };
+
+  const goToDetail = (id) => {
+    goto(`/training/${id}`);
+  };
 </script>
 
 <Header>
@@ -74,7 +78,7 @@
             <div class="text-gray-500">
               {formatDate(training.performedAt)}
             </div>
-            <button class="text-blue-600 text-xs">詳細</button>
+            <button on:click={goToDetail(training.id)} class="text-blue-600 text-xs">詳細</button>
           </div>
           <div class="text-gray-800">
             {#if training.trainingMenus.filter((m) => m.name.trim() !== '').length > 0}
