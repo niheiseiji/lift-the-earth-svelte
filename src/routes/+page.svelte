@@ -6,22 +6,27 @@
   import { fetchTrainings } from '$lib/api';
   import { formatDate } from '$lib/utils/formatDate';
 
+  // 保存完了メッセージを表示するか
   let showSavedMessage = false;
+  // トレーニング一覧
   let trainings = [];
+  // 今日はトレーニング登録済みか
+  let isTodayRegistered = false;
 
   onMount(async () => {
     const url = new URL(window.location.href);
     if (url.searchParams.get('saved') === '1') {
       showSavedMessage = true;
-
-      setTimeout(() => (showSavedMessage = false), 5000);
-
+      setTimeout(() => (showSavedMessage = false), 10000);
       // クエリパラメータをURLから除去
       url.searchParams.delete('saved');
       history.replaceState(null, '', url);
     }
 
     trainings = await fetchTrainings();
+    isTodayRegistered = trainings.some(
+      (t) => t.performedAt.slice(0, 10) === new Date().toISOString().slice(0, 10)
+    );
   });
 
   const goToTraining = () => {
@@ -42,10 +47,16 @@
 
   <div slot="right" class="flex items-center gap-2">
     <button
+      disabled={isTodayRegistered}
       on:click={goToTraining}
-      class="text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
+      class="mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
+       {isTodayRegistered ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}"
     >
-      <span>はじめる🏋️‍♀️</span>
+      {#if isTodayRegistered}
+        完了⭐
+      {:else}
+        トレーニング開始🏋️‍♀️
+      {/if}
     </button>
     <UserIcon />
   </div>
@@ -94,12 +105,17 @@
         </div>
       {/each}
     </div>
-    <!-- TODO: 一日一回の制御 -->
     <button
-      class="mt-2 flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+      disabled={isTodayRegistered}
       on:click={goToTraining}
+      class="mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
+       {isTodayRegistered ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}"
     >
-      トレーニング開始🏋️‍♀️
+      {#if isTodayRegistered}
+        今日のトレーニング受付が完了しました⭐
+      {:else}
+        トレーニング開始🏋️‍♀️
+      {/if}
     </button>
   </div>
 </div>
