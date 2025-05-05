@@ -108,3 +108,75 @@ export const createTraining = async (trainingData) => {
 
   return await res.json();
 };
+
+/**
+ * 全トレーニングを取得する（ログインユーザーの分のみ）
+ * @returns {Promise<TrainingDto[]>}
+ */
+export const fetchTrainings = async () => {
+  const res = await fetch(`${BASE_URL}/trainings`, {
+    credentials: 'include'
+  });
+
+  if (!res.ok) {
+    throw new Error('トレーニング一覧の取得に失敗しました');
+  }
+
+  return await res.json();
+};
+
+/**
+ * トレーニング詳細を取得する
+ * @param {number} id
+ * @returns {Promise<TrainingDto>}
+ */
+export const fetchTrainingById = async (id) => {
+  const res = await fetch(`${BASE_URL}/trainings/${id}`, {
+    credentials: 'include'
+  });
+
+  if (!res.ok) {
+    throw new Error('トレーニングの取得に失敗しました');
+  }
+
+  return await res.json();
+};
+
+/**
+ * トレーニングを更新する
+ * @param {number} id
+ * @param {TrainingDto} trainingData
+ * @returns {Promise<TrainingDto>}
+ */
+export const updateTraining = async (id, trainingData) => {
+  const res = await fetch(`${BASE_URL}/trainings/${id}`, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(trainingData)
+  });
+
+  if (!res.ok) {
+    throw new Error('トレーニングの更新に失敗しました');
+  }
+
+  return await res.json();
+};
+
+/**
+ * トレーニングを削除する
+ * @param {number} id
+ * @returns {Promise<void>}
+ */
+export const deleteTraining = async (id) => {
+  const res = await fetch(`${BASE_URL}/trainings/${id}`, {
+    method: 'DELETE',
+    credentials: 'include'
+  });
+
+  if (!res.ok) {
+    throw new Error('トレーニングの削除に失敗しました');
+  }
+};
