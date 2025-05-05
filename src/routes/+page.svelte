@@ -37,6 +37,12 @@
   </div>
 
   <div slot="right" class="flex items-center gap-2">
+    <button
+      on:click={goToTraining}
+      class="text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
+    >
+      <span>はじめる🏋️‍♀️</span>
+    </button>
     <UserIcon />
   </div>
 </Header>
