@@ -12,6 +12,8 @@
   let trainings = [];
   // 今日はトレーニング登録済みか
   let isTodayRegistered = false;
+  // タブ'you' or 'group'
+  let selectedTab = 'you';
 
   onMount(async () => {
     const url = new URL(window.location.href);
@@ -62,64 +64,92 @@
   </div>
 </Header>
 
-<!-- {#if $user}
-  <div class="">ID:{$user.id}</div>
-  <div class="">MAIL:{$user.email}</div>
-{/if} -->
-
-<div class="flex min-h-full flex-col justify-center px-2 py-2 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <!-- data -->
-    <!-- TODO: 実装 -->
-    <!-- big3 -->
-    <!-- TODO: 実装 -->
-    <!-- current training and start btn -->
-    <div class="rounded border border-gray-200 p-2 bg-white w-full">
-      <!-- ヘッダー -->
-      <div class="flex justify-between items-center mb-2">
-        <h2 class="text-sm font-bold">直近のトレーニング</h2>
-        <!-- TODO: 実装 -->
-        <!-- <button class="text-blue-600 text-sm font-semibold">すべて見る</button> -->
-      </div>
-
-      <!-- トレーニングリスト（上位3件） -->
-      {#each trainings.slice(0, 3) as training}
-        <div class="py-2 border-t border-gray-100 text-sm">
-          <div class="flex justify-between items-center mb-1">
-            <div class="text-gray-500">
-              {formatDate(training.performedAt)}
-            </div>
-            <button on:click={goToDetail(training.id)} class="text-blue-600 text-xs">詳細</button>
-          </div>
-          <div class="text-gray-800">
-            {#if training.trainingMenus.filter((m) => m.name.trim() !== '').length > 0}
-              {#each training.trainingMenus.filter((m) => m.name.trim() !== '') as menu, i (menu.id)}
-                {menu.name}
-                {#if menu.sets?.length > 0}({menu.sets.length}set){/if}
-                {#if i < training.trainingMenus.filter((m) => m.name.trim() !== '').length - 1}、{/if}
-              {/each}
-            {:else}
-              メニュー未登録
-            {/if}
-          </div>
-        </div>
-      {/each}
-    </div>
-    <button
-      disabled={isTodayRegistered}
-      on:click={goToTraining}
-      class="mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
-       {isTodayRegistered ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}"
-    >
-      {#if isTodayRegistered}
-        今日のトレーニング受付が完了しました⭐
-      {:else}
-        トレーニング開始🏋️‍♀️
-      {/if}
-    </button>
-  </div>
+<div class="flex text-sm font-semibold mt-1">
+  <button
+    on:click={() => (selectedTab = 'you')}
+    class="flex-1 text-center py-2 transition-colors duration-200
+      {selectedTab === 'you' ? 'text-blue-600' : 'text-gray-600'}"
+  >
+    あなた
+    {#if selectedTab === 'you'}
+      <div class="mt-1 mx-auto w-10 border-b-2 border-blue-600"></div>
+    {/if}
+  </button>
+  <div class="my-2 border-l-1 border-gray-300"></div>
+  <button
+    on:click={() => (selectedTab = 'group')}
+    class="flex-1 text-center py-2 transition-colors duration-200
+      {selectedTab === 'group' ? 'text-blue-600' : 'text-gray-600'}"
+  >
+    グループ
+    {#if selectedTab === 'group'}
+      <div class="mt-1 mx-auto w-10 border-b-2 border-blue-600"></div>
+    {/if}
+  </button>
 </div>
 
+{#if selectedTab === 'you'}
+  <div class="flex min-h-full flex-col justify-center px-2 py-2 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+      <!-- data -->
+      <!-- TODO: 実装 -->
+      <!-- big3 -->
+      <!-- TODO: 実装 -->
+      <!-- current training & start btn -->
+      <div class="rounded border border-gray-200 p-2 bg-white w-full">
+        <!-- ヘッダー -->
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="text-sm font-bold">直近のトレーニング</h2>
+          <!-- TODO: 実装 -->
+          <!-- <button class="text-blue-600 text-sm font-semibold">すべて見る</button> -->
+        </div>
+
+        <!-- トレーニングリスト（上位3件） -->
+        {#if trainings.length > 0}
+          {#each trainings.slice(0, 3) as training}
+            <div class="py-2 border-t border-gray-100 text-sm">
+              <div class="flex justify-between items-center mb-1">
+                <div class="text-gray-500">
+                  {formatDate(training.performedAt)}
+                </div>
+                <button on:click={goToDetail(training.id)} class="text-blue-600 text-xs"
+                  >詳細</button
+                >
+              </div>
+              <div class="text-gray-800">
+                {#if training.trainingMenus.filter((m) => m.name.trim() !== '').length > 0}
+                  {#each training.trainingMenus.filter((m) => m.name.trim() !== '') as menu, i (menu.id)}
+                    {menu.name}
+                    {#if menu.sets?.length > 0}({menu.sets.length}set){/if}
+                    {#if i < training.trainingMenus.filter((m) => m.name.trim() !== '').length - 1}、{/if}
+                  {/each}
+                {:else}
+                  <div class="py-4 text-sm text-gray-400 text-center">トレーニングが未登録です</div>
+                {/if}
+              </div>
+            </div>
+          {/each}
+        {:else}
+          <div class="py-4 text-sm text-gray-400 text-center">トレーニングが未登録です</div>
+        {/if}
+      </div>
+      <button
+        disabled={isTodayRegistered}
+        on:click={goToTraining}
+        class="mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
+       {isTodayRegistered ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}"
+      >
+        {#if isTodayRegistered}
+          今日のトレーニング受付が完了しました⭐
+        {:else}
+          トレーニング開始🏋️‍♀️
+        {/if}
+      </button>
+    </div>
+  </div>
+{:else if selectedTab === 'group'}
+  <div class="text-center py-12 text-gray-400 text-sm">グループ機能は現在準備中です💡</div>
+{/if}
 <!-- complete modal -->
 {#if showSavedMessage}
   <div
