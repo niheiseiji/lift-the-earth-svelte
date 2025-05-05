@@ -49,7 +49,7 @@
     <button
       disabled={isTodayRegistered}
       on:click={goToTraining}
-      class="mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
+      class="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
        {isTodayRegistered ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}"
     >
       {#if isTodayRegistered}
