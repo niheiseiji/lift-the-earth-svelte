@@ -22,7 +22,13 @@
 </script>
 
 <!-- header -->
-<Header />
+<Header>
+  <div slot="left" class="">
+    <a href="/">
+      <img src="/title_logo.svg" alt="" class="h-[35px]" />
+    </a>
+  </div>
+</Header>
 
 <!-- form contents -->
 <div class="flex min-h-full flex-col justify-center px-6 py-8 lg:px-8">

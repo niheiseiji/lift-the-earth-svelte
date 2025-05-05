@@ -1,12 +1,8 @@
 <header class="bg-white border-b border-gray-200">
   <div class="flex justify-between">
     <!-- 左側 -->
-    <div class="min-w-0">
-      <div class="mx-auto px-2 py-2">
-        <a href="/">
-          <img src="/title_logo.svg" alt="" class="h-[35px]" />
-        </a>
-      </div>
+    <div class="flex min-w-0 items-center px-2 py-2">
+      <slot name="left" />
     </div>
 
     <!-- 右側 -->

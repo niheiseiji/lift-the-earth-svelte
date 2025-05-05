@@ -25,6 +25,12 @@
 </script>
 
 <Header>
+  <div slot="left" class="">
+    <a href="/">
+      <img src="/title_logo.svg" alt="" class="h-[35px]" />
+    </a>
+  </div>
+
   <div slot="right" class="flex items-center gap-2">
     <UserIcon />
   </div>

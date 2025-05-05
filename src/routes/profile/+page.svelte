@@ -3,7 +3,7 @@
   import { Header, UserIcon } from '$lib/components';
   import { user } from '$lib/stores/user';
   import { updateUserName } from '$lib/api.js';
-  import { CircleCheck } from 'lucide-svelte';
+  import { CircleCheck, ArrowLeft } from 'lucide-svelte';
 
   let newName = '';
   let saveStatus = 'idle';
@@ -21,6 +21,11 @@
 </script>
 
 <Header>
+  <div slot="left" class="">
+    <a href="/">
+      <ArrowLeft size={28} class="" />
+    </a>
+  </div>
   <div slot="right" class="flex items-center gap-2">
     <UserIcon />
   </div>

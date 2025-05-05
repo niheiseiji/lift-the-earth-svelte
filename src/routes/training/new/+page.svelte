@@ -1,7 +1,7 @@
 <script>
   import { dndzone } from 'svelte-dnd-action';
   import { Header, UserIcon, PresetButton } from '$lib/components';
-  import { Menu } from 'lucide-svelte';
+  import { Menu, ArrowLeft } from 'lucide-svelte';
   import { createTraining } from '$lib/api.js';
   import { goto } from '$app/navigation';
 
@@ -54,17 +54,19 @@
 </script>
 
 <Header>
+  <div slot="left" class="">
+    <a href="/">
+      <ArrowLeft size={28} class="" />
+    </a>
+  </div>
   <div slot="right" class="flex items-center gap-4">
     <PresetButton />
-    <div class="relative">
-      <button
-        on:click={saveTraining}
-        class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
-      >
-        <span>完了💪</span>
-      </button>
-    </div>
-    <UserIcon />
+    <button
+      on:click={saveTraining}
+      class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
+    >
+      <span>完了💪</span>
+    </button>
   </div>
 </Header>
 
