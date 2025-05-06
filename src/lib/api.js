@@ -196,3 +196,97 @@ export const fetchTrainingSummary = async () => {
 
   return await res.json();
 };
+
+/**
+ * プリセットを新規登録する
+ * @param {{ presetName: string, trainingMenus: Array }} presetData
+ * @returns {Promise<any>}
+ */
+export const createPresetTraining = async (presetData) => {
+  const res = await fetch(`${BASE_URL}/preset-trainings`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(presetData)
+  });
+
+  if (!res.ok) {
+    throw new Error('プリセットの保存に失敗しました');
+  }
+
+  return await res.json();
+};
+
+/**
+ * 全プリセットを取得する（ログインユーザーの分のみ）
+ * @returns {Promise<PresetTrainingDto[]>}
+ */
+export const fetchPresetTrainings = async () => {
+  const res = await fetch(`${BASE_URL}/preset-trainings`, {
+    credentials: 'include'
+  });
+
+  if (!res.ok) {
+    throw new Error('プリセット一覧の取得に失敗しました');
+  }
+
+  return await res.json();
+};
+
+/**
+ * プリセット詳細を取得する
+ * @param {number} id
+ * @returns {Promise<PresetTrainingDto>}
+ */
+export const fetchPresetTrainingById = async (id) => {
+  const res = await fetch(`/api/preset-trainings/${id}`, {
+    credentials: 'include'
+  });
+
+  if (!res.ok) {
+    throw new Error('プリセットの取得に失敗しました');
+  }
+
+  return await res.json();
+};
+
+/**
+ * プリセットを更新する
+ * @param {number} id
+ * @param {PresetTrainingDto} presetData
+ * @returns {Promise<PresetTrainingDto>}
+ */
+export const updatePresetTraining = async (id, presetData) => {
+  const res = await fetch(`${BASE_URL}/preset-trainings/${id}`, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(presetData)
+  });
+
+  if (!res.ok) {
+    throw new Error('プリセットの更新に失敗しました');
+  }
+
+  return await res.json();
+};
+
+/**
+ * プリセットを削除する
+ * @param {number} id
+ * @returns {Promise<void>}
+ */
+export const deletePresetTraining = async (id) => {
+  const res = await fetch(`${BASE_URL}/preset-trainings/${id}`, {
+    method: 'DELETE',
+    credentials: 'include'
+  });
+
+  if (!res.ok) {
+    throw new Error('プリセットの削除に失敗しました');
+  }
+};
