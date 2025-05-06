@@ -2,13 +2,12 @@
   import { dndzone } from 'svelte-dnd-action';
   import { Header, UserIcon, PresetButton } from '$lib/components';
   import { Menu, ArrowLeft } from 'lucide-svelte';
-  import { createTraining } from '$lib/api.js';
   import { goto } from '$app/navigation';
-  import { filterEmptyMenus } from '$lib/utils/filterEmptyMenus.js';
+  import { filterEmptyMenus } from '$lib/utils/filterEmptyMenus';
   import { setCount, menuCount, createSets } from '$lib/utils/trainingForm';
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
-  import { fetchTrainingById, updateTraining } from '$lib/api.js';
+  import { fetchTrainingById, updateTraining, deleteTraining } from '$lib/api';
 
   let id;
 
@@ -61,6 +60,26 @@
       alert('保存に失敗しました');
     }
   };
+
+  let confirmDeleteOpen = false;
+
+  const openDeleteConfirm = () => {
+    confirmDeleteOpen = true;
+  };
+
+  const cancelDelete = () => {
+    confirmDeleteOpen = false;
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await deleteTraining(id);
+      goto('/');
+    } catch (err) {
+      console.error(err);
+      alert('削除に失敗しました');
+    }
+  };
 </script>
 
 <Header>
@@ -70,6 +89,12 @@
     </a>
   </div>
   <div slot="right" class="flex items-center gap-4">
+    <button
+      on:click={openDeleteConfirm}
+      class="text-red-600 hover:bg-red-200 rounded border border-red-500 text-sm px-3 inline-flex items-center h-[35px]"
+    >
+      <span>削除</span>
+    </button>
     <PresetButton />
     <button
       on:click={update}
@@ -119,6 +144,20 @@
     {/each}
   </div>
 </div>
+
+{#if confirmDeleteOpen}
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white p-5 rounded shadow-md w-80 space-y-4">
+      <h2 class="text-sm font-semibold">本当に削除しますか？</h2>
+      <div class="flex justify-end gap-2">
+        <button class="text-sm text-gray-500" on:click={cancelDelete}>キャンセル</button>
+        <button class="text-sm bg-red-600 text-white px-3 py-1 rounded" on:click={confirmDelete}
+          >削除</button
+        >
+      </div>
+    </div>
+  </div>
+{/if}
 
 <style>
   input::-webkit-outer-spin-button,
