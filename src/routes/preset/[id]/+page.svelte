@@ -148,7 +148,7 @@
           class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700"
           on:click={updatePreset}
         >
-          保存する
+          保存
         </button>
       </div>
     </div>

@@ -22,8 +22,10 @@
     location.reload();
   };
 
+  let closeMenu;
+
   onMount(() => {
-    const closeMenu = (e) => {
+    closeMenu = (e) => {
       if (!e.target.closest('.tooltip-wrapper')) {
         openMenuId = null;
       }
