@@ -241,7 +241,7 @@ export const fetchPresetTrainings = async () => {
  * @returns {Promise<PresetTrainingDto>}
  */
 export const fetchPresetTrainingById = async (id) => {
-  const res = await fetch(`/api/preset-trainings/${id}`, {
+  const res = await fetch(`${BASE_URL}/preset-trainings/${id}`, {
     credentials: 'include'
   });
 

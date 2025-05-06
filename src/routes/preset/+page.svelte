@@ -3,6 +3,7 @@
   import { ArrowLeft, MoreVertical } from 'lucide-svelte';
   import { goto } from '$app/navigation';
   import { deletePresetTraining } from '$lib/api';
+  import { onMount, onDestroy } from 'svelte';
 
   export let data;
   const presets = data.presets;
@@ -10,7 +11,7 @@
   const getMenuSummary = (menus) => menus.map((m) => m.name).join('、');
 
   const goToCreatePreset = () => {
-    goto('/presets/new');
+    goto('/preset/new');
   };
 
   let openMenuId = null;
@@ -20,6 +21,22 @@
     await deletePresetTraining(confirmDeleteId);
     location.reload();
   };
+
+  onMount(() => {
+    const closeMenu = (e) => {
+      if (!e.target.closest('.tooltip-wrapper')) {
+        openMenuId = null;
+      }
+    };
+    document.addEventListener('click', closeMenu);
+    return () => {
+      document.removeEventListener('click', closeMenu);
+    };
+  });
+
+  onDestroy(() => {
+    document.removeEventListener('click', closeMenu);
+  });
 </script>
 
 <Header>
@@ -59,34 +76,36 @@
             >
 
             <td class="py-2 relative">
-              <button
-                type="button"
-                class="p-1"
-                on:click={() => (openMenuId = openMenuId === preset.id ? null : preset.id)}
-              >
-                <MoreVertical class="cursor-pointer" />
-              </button>
-              {#if openMenuId === preset.id}
-                <div
-                  class="absolute right-0 mt-1 w-24 bg-white border border-gray-200 rounded shadow z-10 text-xs"
+              <div class="tooltip-wrapper inline-block">
+                <button
+                  type="button"
+                  class="p-1"
+                  on:click={() => (openMenuId = openMenuId === preset.id ? null : preset.id)}
                 >
-                  <button
-                    type="button"
-                    class="px-3 py-2 hover:bg-gray-100 text-left w-full text-xs"
-                    on:click={() => goto(`/preset/${preset.id}`)}
-                  >
-                    編集
-                  </button>
+                  <MoreVertical class="cursor-pointer" />
+                </button>
 
-                  <button
-                    type="button"
-                    class="px-3 py-2 hover:bg-red-100 text-red-600 text-left w-full text-xs"
-                    on:click={() => (confirmDeleteId = preset.id)}
+                {#if openMenuId === preset.id}
+                  <div
+                    class="absolute right-0 mt-1 w-24 bg-white border border-gray-200 rounded shadow z-10 text-xs"
                   >
-                    削除
-                  </button>
-                </div>
-              {/if}
+                    <button
+                      type="button"
+                      class="px-3 py-2 hover:bg-gray-100 text-left w-full text-xs"
+                      on:click={() => goto(`/preset/${preset.id}`)}
+                    >
+                      編集
+                    </button>
+                    <button
+                      type="button"
+                      class="px-3 py-2 hover:bg-red-100 text-red-600 text-left w-full text-xs"
+                      on:click={() => (confirmDeleteId = preset.id)}
+                    >
+                      削除
+                    </button>
+                  </div>
+                {/if}
+              </div>
             </td>
           </tr>
         {/each}
