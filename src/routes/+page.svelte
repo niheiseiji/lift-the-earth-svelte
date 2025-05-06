@@ -2,38 +2,22 @@
   import { Header, UserIcon } from '$lib/components';
   import { user } from '$lib/stores/user';
   import { goto } from '$app/navigation';
-  import { onMount } from 'svelte';
   import { fetchTrainings, fetchTrainingSummary } from '$lib/api';
   import { formatDate } from '$lib/utils/formatDate';
   import { CircleHelp } from 'lucide-svelte';
+  import { onMount, onDestroy } from 'svelte';
 
   // 保存完了メッセージを表示するか
   let showSavedMessage = false;
-  // トレーニング一覧
-  let trainings = [];
-  // トレーニングサマリ
-  let trainingSummary;
-  // 今日はトレーニング登録済みか
-  let isTodayRegistered = false;
   // タブ'you' or 'group'
   let selectedTab = 'you';
 
-  onMount(async () => {
-    const url = new URL(window.location.href);
-    if (url.searchParams.get('saved') === '1') {
-      showSavedMessage = true;
-      setTimeout(() => (showSavedMessage = false), 10000);
-      // クエリパラメータをURLから除去
-      url.searchParams.delete('saved');
-      history.replaceState(null, '', url);
-    }
+  let showTooltip = false;
+  let buttonEl;
+  let tooltipEl;
 
-    trainings = await fetchTrainings();
-    trainingSummary = await fetchTrainingSummary();
-    isTodayRegistered = trainings.some(
-      (t) => t.performedAt.slice(0, 10) === new Date().toISOString().slice(0, 10)
-    );
-  });
+  export let data;
+  const { trainings, trainingSummary, isTodayRegistered } = data;
 
   const goToTraining = () => {
     goto('/training/new');
@@ -42,6 +26,29 @@
   const goToDetail = (id) => {
     goto(`/training/${id}`);
   };
+
+  const toggleTooltip = () => {
+    // 表示中なら何もしない（外クリックで閉じる）
+    if (showTooltip) return;
+
+    // 表示されていない場合だけ開く
+    setTimeout(() => {
+      showTooltip = true;
+    }, 0);
+  };
+  const handleClickOutside = (e) => {
+    if (!buttonEl?.contains(e.target) && !tooltipEl?.contains?.(e.target)) {
+      showTooltip = false;
+    }
+  };
+
+  onMount(() => {
+    window.addEventListener('click', handleClickOutside);
+  });
+
+  onDestroy(() => {
+    window.removeEventListener('click', handleClickOutside);
+  });
 </script>
 
 <Header>
@@ -120,8 +127,8 @@
             </div>
           </div>
 
+          <!-- TODO: レベリングシステム -->
           <!-- <div class="flex flex-col items-center justify-center rounded px-4 py-2 text-center">
-            TBD
           </div> -->
         </div>
       </div>
@@ -130,9 +137,21 @@
       <div class="rounded border border-gray-200 p-4 bg-white w-full">
         <div class="flex justify-between items-start">
           <div class="text-sm space-y-1">
-            <div class="flex items-center gap-1">
+            <div class="relative flex items-center gap-1">
               <h2 class="font-bold">BIG3</h2>
-              <span class="text-gray-400 text-xs"><CircleHelp size={14} /></span>
+              <button on:click={toggleTooltip} class="text-gray-400 text-xs">
+                <CircleHelp size={14} />
+              </button>
+              {#if showTooltip}
+                <div
+                  bind:this={tooltipEl}
+                  class="absolute left-3/4 top-full mt-2 -translate-x-1/2 w-64 rounded bg-gray-800 px-3 py-2 text-sm text-white shadow-lg z-10"
+                  role="tooltip"
+                >
+                  BIG3の記録を登録済みのメニューから抽出します。シュワちゃんの記録は837kgだとか...👱‍♂️
+                </div>
+              {/if}
+              <!-- <span class="text-gray-400 text-xs"><CircleHelp size={14} /></span> -->
             </div>
             <div class="flex justify-between w-40">
               <span>ベンチプレス</span><span>{trainingSummary?.maxBenchPress}kg</span>
