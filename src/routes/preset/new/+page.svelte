@@ -60,7 +60,7 @@
       on:click={openModal}
       class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
     >
-      <span>保存💾</span>
+      <span>保存📌</span>
     </button>
   </div>
 </Header>

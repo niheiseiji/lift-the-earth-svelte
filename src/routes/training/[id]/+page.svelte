@@ -217,7 +217,7 @@
       <input
         type="text"
         bind:value={newPresetName}
-        placeholder="例: 胸の日メニュー"
+        placeholder="例: 上半身強化メニュー"
         class="border rounded w-full px-2 py-1 text-sm"
       />
       <div class="flex justify-end gap-2">
@@ -237,16 +237,22 @@
   <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-20">
     <div class="bg-white p-5 rounded w-96 max-h-[70vh] overflow-auto space-y-2">
       <h2 class="text-sm font-semibold">プリセットを選択</h2>
-      {#each presets as p}
-        <button
-          type="button"
-          class="w-full px-3 py-2 hover:bg-gray-100 text-sm text-left"
-          on:click={() => selectPreset(p)}
-        >
-          <span class="text-weight-bold">{p.presetName}</span>
-          <span class="text-gray-400">({getMenuSummary(p.trainingMenus)})</span>
-        </button>
-      {/each}
+      {#if presets.length > 0}
+        {#each presets as p}
+          <button
+            type="button"
+            class="w-full px-3 py-2 hover:bg-gray-100 text-sm text-left"
+            on:click={() => selectPreset(p)}
+          >
+            <span class="text-weight-bold">{p.presetName}</span>
+            <span class="text-gray-400">({getMenuSummary(p.trainingMenus)})</span>
+          </button>
+        {/each}
+      {:else}
+        <div class="text-center py-12 text-gray-400 text-sm">
+          プリセットを登録するとここに表示されます💡
+        </div>
+      {/if}
       <div class="text-right mt-2">
         <button class="text-sm text-gray-500" on:click={() => (showListModal = false)}
           >閉じる</button
