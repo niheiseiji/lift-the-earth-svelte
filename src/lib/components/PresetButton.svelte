@@ -40,11 +40,14 @@
     on:click={toggleDropdown}
   >
     <span>プリセット</span>
+    <span class="ml-2 w-px h-4 bg-blue-600"></span>
     <ChevronDown class="w-4 h-4 ml-2" />
   </button>
 
   {#if showDropdown}
-    <div class="absolute right-0 mt-1 bg-white border border-gray-200 rounded shadow z-10 text-sm">
+    <div
+      class="absolute right-0 mt-1 bg-white border border-gray-200 rounded shadow z-10 text-sm w-40"
+    >
       <button
         type="button"
         class="block w-full text-left px-4 py-2 hover:bg-gray-100"

@@ -6,8 +6,9 @@
   import { goto } from '$app/navigation';
   import { filterEmptyMenus } from '$lib/utils/filterEmptyMenus.js';
   import { setCount, createSets } from '$lib/utils/trainingForm';
+  import { getMenuSummary } from '$lib/utils/getMenuSummary.js';
 
-  // --- トレーニングメニュー ---
+  // デフォルトメニュー
   let menus = [
     { id: '1', name: 'ベンチプレス', sets: createSets(setCount) },
     { id: '2', name: '', sets: createSets(setCount) },
@@ -61,7 +62,7 @@
             weight: Number(s.weight)
           }))
         }))
-      }); // :contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}
+      });
       alert('プリセットを保存しました');
     } catch {
       alert('プリセットの保存に失敗しました');
@@ -75,8 +76,9 @@
   let showConfirmModal = false;
   let presets = [];
   let loadCandidate = null;
-  const openLoadList = async () => {
-    presets = await fetchPresetTrainings(); // :contentReference[oaicite:2]{index=2}:contentReference[oaicite:3]{index=3}
+  const openLoadPresetList = async () => {
+    presets = await fetchPresetTrainings();
+    console.log({ presets });
     showListModal = true;
   };
   const selectPreset = (p) => {
@@ -93,6 +95,7 @@
         weight: m.sets?.[j]?.weight ?? ''
       }))
     }));
+    console.log({ loadCandidate, menus });
     showConfirmModal = false;
   };
 </script>
@@ -102,7 +105,7 @@
     <a href="/"><ArrowLeft size={28} /></a>
   </div>
   <div slot="right" class="flex items-center gap-4">
-    <PresetButton on:register={openSaveModal} on:load={openLoadList} />
+    <PresetButton on:register={openSaveModal} on:load={openLoadPresetList} />
     <button
       on:click={saveTraining}
       class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
@@ -182,10 +185,11 @@
       {#each presets as p}
         <button
           type="button"
-          class="flex justify-between w-full px-3 py-2 hover:bg-gray-100 text-sm"
+          class="w-full px-3 py-2 hover:bg-gray-100 text-sm text-left"
           on:click={() => selectPreset(p)}
         >
-          <span class="truncate">{p.presetName}</span>
+          <span class="text-weight-bold">{p.presetName}</span>
+          <span class="text-gray-400">({getMenuSummary(p.trainingMenus)})</span>
         </button>
       {/each}
       <div class="text-right mt-2">

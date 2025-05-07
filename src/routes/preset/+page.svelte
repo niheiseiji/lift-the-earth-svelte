@@ -4,11 +4,10 @@
   import { goto } from '$app/navigation';
   import { deletePresetTraining } from '$lib/api';
   import { onMount, onDestroy } from 'svelte';
+  import { getMenuSummary } from '$lib/utils/getMenuSummary.js';
 
   export let data;
   const presets = data.presets;
-
-  const getMenuSummary = (menus) => menus.map((m) => m.name).join('、');
 
   const goToCreatePreset = () => {
     goto('/preset/new');
