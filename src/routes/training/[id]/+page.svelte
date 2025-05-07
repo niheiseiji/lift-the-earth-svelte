@@ -4,10 +4,17 @@
   import { Menu, ArrowLeft } from 'lucide-svelte';
   import { goto } from '$app/navigation';
   import { filterEmptyMenus } from '$lib/utils/filterEmptyMenus';
-  import { setCount, menuCount, createSets } from '$lib/utils/trainingForm';
+  import { setCount, menuCount, createSets, padMenus } from '$lib/utils/trainingForm';
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
-  import { fetchTrainingById, updateTraining, deleteTraining } from '$lib/api';
+  import {
+    fetchTrainingById,
+    updateTraining,
+    deleteTraining,
+    createPresetTraining,
+    fetchPresetTrainings
+  } from '$lib/api';
+  import { getMenuSummary } from '$lib/utils/getMenuSummary';
 
   let id;
 
@@ -17,26 +24,11 @@
   onMount(async () => {
     id = $page.params.id;
     const training = await fetchTrainingById(id);
-    menus = Array.from({ length: 6 }, (_, i) => {
-      const m = training.trainingMenus[i] || {};
-      return {
-        id: m.id || `${i + 1}`,
-        name: m.name || '',
-        sets: createSets(setCount).map((_, j) => ({
-          reps: m.sets?.[j]?.reps ?? '',
-          weight: m.sets?.[j]?.weight ?? ''
-        }))
-      };
-    });
+    menus = padMenus(training.trainingMenus);
   });
 
-  const handleDndConsider = (event) => {
-    menus = event.detail.items;
-  };
-
-  const handleDndFinalize = (event) => {
-    menus = event.detail.items;
-  };
+  const handleDndConsider = (e) => (menus = e.detail.items);
+  const handleDndFinalize = (e) => (menus = e.detail.items);
 
   const update = async () => {
     const body = {
@@ -80,6 +72,62 @@
       alert('削除に失敗しました');
     }
   };
+
+  // --- プリセット保存モーダル制御 ---
+  let showSaveModal = false;
+  let newPresetName = '';
+  const openSaveModal = () => {
+    newPresetName = '';
+    showSaveModal = true;
+  };
+  const doSavePreset = async () => {
+    try {
+      await createPresetTraining({
+        presetName: newPresetName,
+        trainingMenus: filterEmptyMenus(menus).map((m, i) => ({
+          displayOrder: i + 1,
+          name: m.name,
+          sets: m.sets.map((s, j) => ({
+            setOrder: j + 1,
+            reps: Number(s.reps),
+            weight: Number(s.weight)
+          }))
+        }))
+      });
+      alert('プリセットを保存しました');
+    } catch {
+      alert('プリセットの保存に失敗しました');
+    } finally {
+      showSaveModal = false;
+    }
+  };
+
+  // --- プリセットロードモーダル制御 ---
+  let showListModal = false;
+  let showConfirmModal = false;
+  let presets = [];
+  let loadCandidate = null;
+  const openLoadPresetList = async () => {
+    presets = await fetchPresetTrainings();
+    showListModal = true;
+  };
+  const selectPreset = (p) => {
+    loadCandidate = p;
+    showListModal = false;
+    showConfirmModal = true;
+  };
+  const applyPreset = () => {
+    const loadMenus = loadCandidate.trainingMenus.map((m, i) => ({
+      id: `${i + 1}`,
+      name: m.name,
+      sets: createSets(setCount).map((_, j) => ({
+        reps: m.sets?.[j]?.reps ?? '',
+        weight: m.sets?.[j]?.weight ?? ''
+      }))
+    }));
+    menus = padMenus(loadMenus);
+    showConfirmModal = false;
+  };
 </script>
 
 <Header>
@@ -95,7 +143,7 @@
     >
       <span>削除</span>
     </button>
-    <PresetButton />
+    <PresetButton on:register={openSaveModal} on:load={openLoadPresetList} />
     <button
       on:click={update}
       class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
@@ -153,6 +201,70 @@
         <button class="text-sm text-gray-500" on:click={cancelDelete}>キャンセル</button>
         <button class="text-sm bg-red-600 text-white px-3 py-1 rounded" on:click={confirmDelete}
           >削除</button
+        >
+      </div>
+    </div>
+  </div>
+{/if}
+
+<!-- プリセット保存モーダル -->
+{#if showSaveModal}
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-20">
+    <div class="bg-white p-5 rounded w-80 space-y-4">
+      <h2 class="text-sm font-semibold">プリセット名を入力</h2>
+      <input
+        type="text"
+        bind:value={newPresetName}
+        placeholder="例: 胸の日メニュー"
+        class="border rounded w-full px-2 py-1 text-sm"
+      />
+      <div class="flex justify-end gap-2">
+        <button class="text-sm text-gray-500" on:click={() => (showSaveModal = false)}
+          >キャンセル</button
+        >
+        <button class="text-sm bg-blue-600 text-white px-3 py-1 rounded" on:click={doSavePreset}
+          >保存</button
+        >
+      </div>
+    </div>
+  </div>
+{/if}
+
+<!-- プリセット一覧モーダル -->
+{#if showListModal}
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-20">
+    <div class="bg-white p-5 rounded w-96 max-h-[70vh] overflow-auto space-y-2">
+      <h2 class="text-sm font-semibold">プリセットを選択</h2>
+      {#each presets as p}
+        <button
+          type="button"
+          class="w-full px-3 py-2 hover:bg-gray-100 text-sm text-left"
+          on:click={() => selectPreset(p)}
+        >
+          <span class="text-weight-bold">{p.presetName}</span>
+          <span class="text-gray-400">({getMenuSummary(p.trainingMenus)})</span>
+        </button>
+      {/each}
+      <div class="text-right mt-2">
+        <button class="text-sm text-gray-500" on:click={() => (showListModal = false)}
+          >閉じる</button
+        >
+      </div>
+    </div>
+  </div>
+{/if}
+
+<!-- ロード確認モーダル -->
+{#if showConfirmModal}
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-20">
+    <div class="bg-white p-5 rounded w-80 space-y-4">
+      <p class="text-sm">現在のメニューがプリセットで上書きされます。よろしいですか？</p>
+      <div class="flex justify-end gap-2">
+        <button class="text-sm text-gray-500" on:click={() => (showConfirmModal = false)}
+          >キャンセル</button
+        >
+        <button class="text-sm bg-blue-600 text-white px-3 py-1 rounded" on:click={applyPreset}
+          >OK</button
         >
       </div>
     </div>

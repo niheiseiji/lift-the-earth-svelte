@@ -17,6 +17,7 @@ export const createSets = (count) =>
  * @returns {Array<{ name: string, sets: Array<{ reps: string, weight: string }> }>}
  */
 export const padMenus = (menus) => {
+  console.log({menus})
   return Array.from({ length: menuCount }, (_, i) => {
     const base = menus[i] ?? { name: '', sets: [] };
     const paddedSets = createSets(setCount).map((emptySet, j) => {

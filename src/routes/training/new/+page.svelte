@@ -2,11 +2,11 @@
   import { dndzone } from 'svelte-dnd-action';
   import { Header, UserIcon, PresetButton } from '$lib/components';
   import { Menu, ArrowLeft } from 'lucide-svelte';
-  import { createTraining, createPresetTraining, fetchPresetTrainings } from '$lib/api.js';
+  import { createTraining, createPresetTraining, fetchPresetTrainings } from '$lib/api';
   import { goto } from '$app/navigation';
-  import { filterEmptyMenus } from '$lib/utils/filterEmptyMenus.js';
+  import { filterEmptyMenus } from '$lib/utils/filterEmptyMenus';
   import { setCount, createSets, padMenus } from '$lib/utils/trainingForm';
-  import { getMenuSummary } from '$lib/utils/getMenuSummary.js';
+  import { getMenuSummary } from '$lib/utils/getMenuSummary';
 
   // デフォルトメニューのサンプル値としてベンチプレスを入れておく
   let menus = [{ id: '1', name: 'ベンチプレス', sets: [{ reps: '10', weight: '60' }] }];
@@ -72,7 +72,6 @@
   let loadCandidate = null;
   const openLoadPresetList = async () => {
     presets = await fetchPresetTrainings();
-    console.log({ presets });
     showListModal = true;
   };
   const selectPreset = (p) => {
