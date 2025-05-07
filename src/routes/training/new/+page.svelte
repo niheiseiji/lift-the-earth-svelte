@@ -5,18 +5,12 @@
   import { createTraining, createPresetTraining, fetchPresetTrainings } from '$lib/api.js';
   import { goto } from '$app/navigation';
   import { filterEmptyMenus } from '$lib/utils/filterEmptyMenus.js';
-  import { setCount, createSets } from '$lib/utils/trainingForm';
+  import { setCount, createSets, padMenus } from '$lib/utils/trainingForm';
   import { getMenuSummary } from '$lib/utils/getMenuSummary.js';
 
-  // デフォルトメニュー
-  let menus = [
-    { id: '1', name: 'ベンチプレス', sets: createSets(setCount) },
-    { id: '2', name: '', sets: createSets(setCount) },
-    { id: '3', name: '', sets: createSets(setCount) },
-    { id: '4', name: '', sets: createSets(setCount) },
-    { id: '5', name: '', sets: createSets(setCount) },
-    { id: '6', name: '', sets: createSets(setCount) }
-  ];
+  // デフォルトメニューのサンプル値としてベンチプレスを入れておく
+  let menus = [{ id: '1', name: 'ベンチプレス', sets: [{ reps: '10', weight: '60' }] }];
+  menus = padMenus(menus);
 
   const handleDndConsider = (e) => (menus = e.detail.items);
   const handleDndFinalize = (e) => (menus = e.detail.items);
@@ -87,7 +81,7 @@
     showConfirmModal = true;
   };
   const applyPreset = () => {
-    menus = loadCandidate.trainingMenus.map((m, i) => ({
+    const loadMenus = loadCandidate.trainingMenus.map((m, i) => ({
       id: `${i + 1}`,
       name: m.name,
       sets: createSets(setCount).map((_, j) => ({
@@ -95,7 +89,7 @@
         weight: m.sets?.[j]?.weight ?? ''
       }))
     }));
-    console.log({ loadCandidate, menus });
+    menus = padMenus(loadMenus);
     showConfirmModal = false;
   };
 </script>

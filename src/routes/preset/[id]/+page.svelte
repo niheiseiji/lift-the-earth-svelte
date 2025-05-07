@@ -5,7 +5,7 @@
   import { createTraining } from '$lib/api.js';
   import { goto } from '$app/navigation';
   import { filterEmptyMenus } from '$lib/utils/filterEmptyMenus.js';
-  import { setCount, menuCount, createSets } from '$lib/utils/trainingForm';
+  import { padMenus } from '$lib/utils/trainingForm';
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { fetchPresetTrainingById, updatePresetTraining } from '$lib/api.js';
@@ -22,17 +22,7 @@
     id = $page.params.id;
     const training = await fetchPresetTrainingById(id);
     presetName = training.presetName;
-    menus = Array.from({ length: 6 }, (_, i) => {
-      const m = training.trainingMenus[i] || {};
-      return {
-        id: m.id || `${i + 1}`,
-        name: m.name || '',
-        sets: createSets(setCount).map((_, j) => ({
-          reps: m.sets?.[j]?.reps ?? '',
-          weight: m.sets?.[j]?.weight ?? ''
-        }))
-      };
-    });
+    menus = padMenus(training.trainingMenus);
   });
 
   const handleDndConsider = (event) => {

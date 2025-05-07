@@ -43,6 +43,19 @@
   };
 
   onMount(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('saved') === '1') {
+      showSavedMessage = true;
+
+      setTimeout(() => (showSavedMessage = false), 10000);
+
+      // クエリパラメータをURLから除去
+      url.searchParams.delete('saved');
+      history.replaceState(null, '', url);
+    }
+  });
+
+  onMount(() => {
     window.addEventListener('click', handleClickOutside);
   });
 
