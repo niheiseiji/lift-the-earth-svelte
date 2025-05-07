@@ -15,6 +15,7 @@
     fetchPresetTrainings
   } from '$lib/api';
   import { getMenuSummary } from '$lib/utils/getMenuSummary';
+  import { showToast } from '$lib/stores/toast';
 
   let id;
 
@@ -49,7 +50,7 @@
       goto('/?update=1');
     } catch (err) {
       console.error(err);
-      alert('保存に失敗しました');
+      alert('保存に失敗しました😥');
     }
   };
 
@@ -69,7 +70,7 @@
       goto('/');
     } catch (err) {
       console.error(err);
-      alert('削除に失敗しました');
+      alert('削除に失敗しました😥');
     }
   };
 
@@ -94,9 +95,9 @@
           }))
         }))
       });
-      alert('プリセットを保存しました');
+      showToast('プリセットを保存しました👱‍♂️', 'success');
     } catch {
-      alert('プリセットの保存に失敗しました');
+      showToast('プリセットの保存に失敗しました😥', 'error');
     } finally {
       showSaveModal = false;
     }
@@ -127,6 +128,7 @@
     }));
     menus = padMenus(loadMenus);
     showConfirmModal = false;
+    showToast('プリセットからロードしました👱‍♂️', 'success');
   };
 </script>
 

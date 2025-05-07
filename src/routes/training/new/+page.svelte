@@ -7,6 +7,7 @@
   import { filterEmptyMenus } from '$lib/utils/filterEmptyMenus';
   import { setCount, createSets, padMenus } from '$lib/utils/trainingForm';
   import { getMenuSummary } from '$lib/utils/getMenuSummary';
+  import { showToast } from '$lib/stores/toast';
 
   // デフォルトメニューのサンプル値としてベンチプレスを入れておく
   let menus = [{ id: '1', name: 'ベンチプレス', sets: [{ reps: '10', weight: '60' }] }];
@@ -32,7 +33,7 @@
       await createTraining(body);
       goto('/?saved=1');
     } catch {
-      alert('保存に失敗しました');
+      alert('保存に失敗しました😥');
     }
   };
 
@@ -57,9 +58,9 @@
           }))
         }))
       });
-      alert('プリセットを保存しました');
+      showToast('プリセットを保存しました', 'success');
     } catch {
-      alert('プリセットの保存に失敗しました');
+      showToast('プリセットの保存に失敗しました', 'error');
     } finally {
       showSaveModal = false;
     }
@@ -90,6 +91,7 @@
     }));
     menus = padMenus(loadMenus);
     showConfirmModal = false;
+    showToast('プリセットからロードしました👱‍♂️', 'success');
   };
 </script>
 

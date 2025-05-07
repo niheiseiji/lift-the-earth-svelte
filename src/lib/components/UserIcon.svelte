@@ -10,7 +10,8 @@
 
   const handleLogout = async () => {
     try {
-      await logout(); // サーバ側でCookie削除
+      // サーバ側でCookie削除
+      await logout();
     } catch (e) {
       alert(e.message);
     }

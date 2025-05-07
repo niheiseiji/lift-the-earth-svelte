@@ -56,7 +56,7 @@
       goto('/preset');
     } catch (err) {
       console.error(err);
-      alert('保存に失敗しました');
+      alert('保存に失敗しました😥');
     }
   };
 </script>

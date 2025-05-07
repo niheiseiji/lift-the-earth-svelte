@@ -255,7 +255,7 @@
       </div>
 
       <div class="mt-4">
-        <p class="text-pretty text-gray-700">今日のトレーニング受付が完了しました。</p>
+        <p class="text-pretty text-gray-700">今日のトレーニング受付が完了しました👱‍♂️</p>
         <!-- TODO: 気の利いたメッセージを出したい -->
       </div>
 
