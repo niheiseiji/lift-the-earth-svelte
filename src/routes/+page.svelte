@@ -6,6 +6,7 @@
   import { formatDate } from '$lib/utils/formatDate';
   import { CircleHelp } from 'lucide-svelte';
   import { onMount, onDestroy } from 'svelte';
+  import { showToast } from '$lib/stores/toast';
 
   // 保存完了メッセージを表示するか
   let showSavedMessage = false;
@@ -46,9 +47,12 @@
     const url = new URL(window.location.href);
     if (url.searchParams.get('saved') === '1') {
       showSavedMessage = true;
-
-      // クエリパラメータをURLから除去
       url.searchParams.delete('saved');
+      history.replaceState(null, '', url);
+    }
+    if (url.searchParams.get('updated') === '1') {
+      showToast('更新しました！', 'success');
+      url.searchParams.delete('updated');
       history.replaceState(null, '', url);
     }
   });

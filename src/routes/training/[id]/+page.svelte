@@ -47,7 +47,7 @@
 
     try {
       await updateTraining(id, body);
-      goto('/?update=1');
+      goto('/?updated=1');
     } catch (err) {
       console.error(err);
       alert('保存に失敗しました😥');
