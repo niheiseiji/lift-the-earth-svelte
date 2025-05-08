@@ -17,16 +17,9 @@
   import { getMenuSummary } from '$lib/utils/getMenuSummary';
   import { showToast } from '$lib/stores/toast';
 
-  let id;
-
-  // デフォルト値
-  let menus = [];
-
-  onMount(async () => {
-    id = $page.params.id;
-    const training = await fetchTrainingById(id);
-    menus = padMenus(training.trainingMenus);
-  });
+  export let data;
+  let { id, training } = data;
+  let menus = padMenus(training.trainingMenus);
 
   const handleDndConsider = (e) => (menus = e.detail.items);
   const handleDndFinalize = (e) => (menus = e.detail.items);

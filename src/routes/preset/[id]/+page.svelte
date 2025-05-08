@@ -10,20 +10,14 @@
   import { page } from '$app/stores';
   import { fetchPresetTrainingById, updatePresetTraining } from '$lib/api.js';
 
-  let id;
-
   // デフォルト値
-  let menus = [];
-
   let showModal = false;
   let presetName = '';
 
-  onMount(async () => {
-    id = $page.params.id;
-    const training = await fetchPresetTrainingById(id);
-    presetName = training.presetName;
-    menus = padMenus(training.trainingMenus);
-  });
+  export let data;
+  let { id, training } = data;
+  presetName = training.presetName;
+  let menus = padMenus(training.trainingMenus);
 
   const handleDndConsider = (event) => {
     menus = event.detail.items;
@@ -63,7 +57,7 @@
 
 <Header>
   <div slot="left" class="">
-    <a href="/">
+    <a href="/preset">
       <ArrowLeft size={28} class="" />
     </a>
   </div>
