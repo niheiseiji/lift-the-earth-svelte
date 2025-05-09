@@ -5,6 +5,7 @@
   import { deletePresetTraining } from '$lib/api';
   import { onMount, onDestroy } from 'svelte';
   import { getMenuSummary } from '$lib/utils/getMenuSummary.js';
+  import { showToast } from '$lib/stores/toast';
 
   export let data;
   const presets = data.presets;
@@ -22,6 +23,20 @@
   };
 
   let closeMenu;
+
+  onMount(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('saved') === '1') {
+      showToast('登録しました！', 'success');
+      url.searchParams.delete('saved');
+      history.replaceState(null, '', url);
+    }
+    if (url.searchParams.get('updated') === '1') {
+      showToast('更新しました！', 'success');
+      url.searchParams.delete('updated');
+      history.replaceState(null, '', url);
+    }
+  });
 
   onMount(() => {
     closeMenu = (e) => {

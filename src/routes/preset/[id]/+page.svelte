@@ -47,7 +47,7 @@
 
     try {
       await updatePresetTraining(id, body);
-      goto('/preset');
+      goto('/preset?updated=1');
     } catch (err) {
       console.error(err);
       alert('保存に失敗しました😥');
