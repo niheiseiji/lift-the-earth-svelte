@@ -2,28 +2,41 @@
   import { onMount } from 'svelte';
   import { Header, UserIcon } from '$lib/components';
   import { user } from '$lib/stores/user';
-  import { updateUserName } from '$lib/api.js';
+  import { updateUserSetting } from '$lib/api';
   import { CircleCheck, ArrowLeft } from 'lucide-svelte';
+  import { showToast } from '$lib/stores/toast';
 
-  let newName = '';
-  let saveStatus = 'idle';
+  let displayName = '';
+  let uniqueName = '';
+  $: displayName = $user?.displayName;
+  $: uniqueName = $user?.uniqueName;
 
-  $: newName = $user?.name;
+  let showEditModal = false;
+
+  const openModal = () => {
+    displayName = $user.displayName ?? '';
+    uniqueName = $user.uniqueName ?? '';
+    showEditModal = true;
+  };
 
   const onUpdate = async () => {
     try {
-      await updateUserName(newName);
-      $user.name = newName;
-      saveStatus = 'success';
-      setTimeout(() => (saveStatus = 'idle'), 3000); // 3秒後に戻す
-    } catch (e) {}
+      await updateUserSetting({ displayName, uniqueName });
+      $user.displayName = displayName;
+      $user.uniqueName = uniqueName;
+      showToast('更新しました！', 'success');
+      showEditModal = false;
+    } catch (e) {
+      console.error(e);
+      showToast('更新に失敗しました😥', 'error');
+    }
   };
 </script>
 
 <Header>
-  <div slot="left" class="">
+  <div slot="left">
     <a href="/">
-      <ArrowLeft size={28} class="" />
+      <ArrowLeft size={28} />
     </a>
   </div>
   <div slot="right" class="flex items-center gap-2">
@@ -31,37 +44,62 @@
   </div>
 </Header>
 
-{#if $user}
-  <div class="m-2">
-    <form on:submit|preventDefault={onUpdate} class="space-y-6">
-      <div>
-        <label for="user-name" class="block text-sm font-medium text-gray-900">ニックネーム</label>
-        <div class="mt-2">
+<div class="m-4 space-y-4">
+  <div class="text-lg font-semibold">プロフィール</div>
+  <div class="text-sm text-gray-600">表示名：{$user?.displayName}</div>
+  <div class="text-sm text-gray-600">ユーザーID：{$user?.uniqueName}</div>
+  <button
+    on:click={openModal}
+    class="mt-4 px-4 py-2 bg-blue-700 text-white text-sm rounded hover:bg-blue-800"
+  >
+    編集
+  </button>
+</div>
+
+{#if showEditModal}
+  <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded shadow-md w-[90%] max-w-md space-y-6">
+      <h2 class="text-base font-semibold">プロフィールを編集</h2>
+      <form on:submit|preventDefault={onUpdate} class="space-y-4">
+        <div>
+          <label for="display-name" class="text-sm font-medium text-gray-900">表示名</label>
           <input
-            id="user-name"
+            id="display-name"
             type="text"
-            bind:value={newName}
+            bind:value={displayName}
             required
-            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm"
+            class="mt-1 block w-full rounded-md px-3 py-1.5 text-base border border-gray-300"
           />
         </div>
-      </div>
-      <div>
-        <!-- TODO: レイアウト -->
-        <button
-          type="submit"
-          class={`flex w-full justify-center items-center gap-2 rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm
-            ${saveStatus === 'success' ? 'bg-green-600 hover:bg-green-500' : 'bg-blue-700 hover:bg-blue-500'}
-          `}
-        >
-          {#if saveStatus === 'success'}
-            <CircleCheck class="size-4" />
-            保存しました！
-          {:else}
+        <div>
+          <label for="unique-name" class="text-sm font-medium text-gray-900"
+            >ユーザーID（@付き）</label
+          >
+          <input
+            id="unique-name"
+            type="text"
+            bind:value={uniqueName}
+            pattern="^@\w+$"
+            required
+            class="mt-1 block w-full rounded-md px-3 py-1.5 text-base border border-gray-300"
+          />
+        </div>
+        <div class="flex justify-end gap-2">
+          <button
+            type="button"
+            on:click={() => (showEditModal = false)}
+            class="text-sm text-gray-600"
+          >
+            キャンセル
+          </button>
+          <button
+            type="submit"
+            class="text-sm text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded"
+          >
             保存
-          {/if}
-        </button>
-      </div>
-    </form>
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 {/if}

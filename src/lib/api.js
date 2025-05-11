@@ -69,21 +69,21 @@ export const fetchMe = async () => {
 };
 
 /**
- * ユーザー名を更新
+ * ユーザーを更新
  * @param {string} name
  */
-export const updateUserName = async (name) => {
+export const updateUserSetting = async ({ displayName, uniqueName }) => {
   const res = await fetch(`${BASE_URL}/user/setting`, {
     method: 'PUT',
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ name })
+    body: JSON.stringify({ displayName, uniqueName }),
   });
 
   if (!res.ok) {
-    throw new Error('ユーザー名の更新に失敗しました');
+    throw new Error('ユーザーの更新に失敗しました');
   }
 };
 

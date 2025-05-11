@@ -66,6 +66,7 @@
 </Header>
 
 <div class="bg-gray-100 min-h-screen pt-1">
+  <!-- TODO:DNDの誤操作が発生しやすいため要改善 -->
   <div
     use:dndzone={{ items: menus, flipDurationMs: 200 }}
     on:consider={handleDndConsider}

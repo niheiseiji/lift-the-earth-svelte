@@ -41,52 +41,7 @@
       <p class="text-red-600 text-sm text-center mb-4">{error}</p>
     {/if}
 
-    <form class="space-y-6" on:submit|preventDefault={handleLogin}>
-      <div>
-        <label for="email" class="block text-sm font-medium text-gray-900">メールアドレス</label>
-        <div class="mt-2">
-          <input
-            id="email"
-            type="email"
-            bind:value={email}
-            required
-            autocomplete="email"
-            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-900">パスワード</label>
-        <div class="mt-2">
-          <input
-            id="password"
-            type="password"
-            bind:value={password}
-            required
-            autocomplete="current-password"
-            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-blue-600 sm:text-sm"
-          />
-        </div>
-      </div>
-
-      <div>
-        <button
-          type="submit"
-          class="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-        >
-          ログイン
-        </button>
-      </div>
-    </form>
-    <p class="mt-10 text-center text-sm/6 text-gray-500">
-      <a href="/signup" class="font-semibold text-blue-600 hover:text-blue-500"
-        >新規アカウント登録はこちら
-      </a>
-    </p>
-
     <div class="mt-6 text-center">
-      <h3 class="text-sm text-gray-500 mb-2">別の方法でログイン</h3>
       <button
         on:click={loginWithGoogle}
         class="w-full flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50"
@@ -111,6 +66,7 @@
         </svg>
         Googleでログイン
       </button>
+      <!-- TODO:LINE, apple追加予定 -->
     </div>
   </div>
 </div>

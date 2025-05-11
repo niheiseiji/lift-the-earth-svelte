@@ -10,7 +10,6 @@
 
   const handleLogout = async () => {
     try {
-      // サーバ側でCookie削除
       await logout();
     } catch (e) {
       alert(e.message);
@@ -56,8 +55,8 @@
   {#if showDropdown}
     <div class="absolute text-gray-700 top-full right-0 mt-2 z-10 w-44 bg-gray-100 rounded shadow">
       <div class="px-4 py-3 text-sm">
-        <div class="font-medium truncate">{$user.name}</div>
-        <div class="font-medium truncate">{$user.email}</div>
+        <div class="font-medium truncate">{$user.displayName}</div>
+        <div class="font-medium truncate">{$user.uniqueName}</div>
       </div>
       <hr class="mx-2 border border-gray-300" />
       <ul class="py-2 text-sm">
