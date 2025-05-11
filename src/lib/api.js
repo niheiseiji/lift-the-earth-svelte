@@ -88,6 +88,24 @@ export const updateUserSetting = async ({ displayName, uniqueName }) => {
 };
 
 /**
+ * ユーザーのプロフィール画像更新
+ * @param {string} name
+ */
+export const uploadProfileImage = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const res = await fetch(`${BASE_URL}/user/upload-profile-image`, {
+    method: 'POST',
+    credentials: 'include',
+    body: formData
+  });
+
+  if (!res.ok) throw new Error('アップロード失敗');
+  return await res.text();
+};
+
+/**
  * トレーニングを新規登録する
  * @param {{ performedAt: string, trainingMenus: Array }} trainingData
  * @returns {Promise<any>}

@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { Header, UserIcon } from '$lib/components';
   import { user } from '$lib/stores/user';
-  import { updateUserSetting } from '$lib/api';
+  import { updateUserSetting, uploadProfileImage } from '$lib/api';
   import { CircleCheck, ArrowLeft } from 'lucide-svelte';
   import { showToast } from '$lib/stores/toast';
 
@@ -31,6 +31,20 @@
       showToast('更新に失敗しました😥', 'error');
     }
   };
+
+  const onSelectFile = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      const url = await uploadProfileImage(file);
+      $user.profileImageUrl = url;
+      showToast('画像を更新しました', 'success');
+    } catch (err) {
+      console.error(err);
+      showToast('画像のアップロードに失敗しました', 'error');
+    }
+  };
 </script>
 
 <Header>
@@ -43,6 +57,20 @@
     <UserIcon />
   </div>
 </Header>
+
+<div class="flex items-center gap-4">
+  <img
+    src={$user?.profileImageUrl || '/onigiri_nori.png'}
+    alt="プロフィール画像"
+    class="w-16 h-16 rounded-full object-cover border"
+  />
+  <div>
+    <label class="text-sm text-blue-600 underline cursor-pointer">
+      画像を変更
+      <input type="file" accept="image/*" class="hidden" on:change={onSelectFile} />
+    </label>
+  </div>
+</div>
 
 <div class="m-4 space-y-4">
   <div class="text-lg font-semibold">プロフィール</div>
