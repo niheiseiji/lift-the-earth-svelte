@@ -21,11 +21,6 @@
   };
 </script>
 
-<!-- form contents -->
-<!-- <div
-  class="flex min-h-screen flex-col justify-center px-6 py-8 lg:px-8 bg-cover bg-center bg-no-repeat"
-  style="background-image: url('/hawaii_beach.jpg')"
-> -->
 <div class="relative min-h-screen">
   <!-- 背景レイヤー -->
   <div
@@ -36,7 +31,7 @@
   <div
     class="relative z-10 flex min-h-screen flex-col justify-center items-center px-6 py-8 lg:px-8"
   >
-    <div class="bg-white/10 backdrop-blur-md rounded-xl px-8 py-6 shadow-xl">
+    <div class="bg-white/20 backdrop-blur-sm rounded-md px-8 py-6 shadow-xl">
       <div class="sm:mx-auto sm:w-full sm:max-w-sm flex justify-center items-center">
         <img src="/macho_gotikaku_white.svg" alt="" class="h-[28px]" />
       </div>
@@ -77,3 +72,5 @@
     </div>
   </div>
 </div>
+
+<div class="absolute bottom-4 right-4 text-white text-xs opacity-70">© 2025 NIHEI SEIJI</div>
