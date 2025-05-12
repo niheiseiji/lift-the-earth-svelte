@@ -69,7 +69,7 @@
 <Header>
   <div slot="left" class="">
     <a href="/">
-      <img src="/title_logo.svg" alt="" class="h-[35px]" />
+      <img src="/macho_gotikaku_black.svg" alt="" class="h-[20px]" />
     </a>
   </div>
 
