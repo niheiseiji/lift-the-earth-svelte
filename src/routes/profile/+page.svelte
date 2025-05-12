@@ -12,6 +12,7 @@
   $: uniqueName = $user?.uniqueName;
 
   let showEditModal = false;
+  let showImageModal = false;
 
   const openModal = () => {
     displayName = $user.displayName ?? '';
@@ -58,22 +59,17 @@
   </div>
 </Header>
 
-<div class="flex items-center gap-4">
-  <img
-    src={$user?.profileImageUrl || '/onigiri_nori.png'}
-    alt="プロフィール画像"
-    class="w-16 h-16 rounded-full object-cover border"
-  />
-  <div>
-    <label class="text-sm text-blue-600 underline cursor-pointer">
-      画像を変更
-      <input type="file" accept="image/*" class="hidden" on:change={onSelectFile} />
-    </label>
-  </div>
-</div>
-
 <div class="m-4 space-y-4">
   <div class="text-lg font-semibold">プロフィール</div>
+  <div class="flex items-center gap-4">
+    <button on:click={() => (showImageModal = true)}>
+      <img
+        src={$user?.profileImageUrl || '/onigiri_nori.png'}
+        alt="プロフィール画像"
+        class="w-16 h-16 rounded-full object-cover cursor-pointer"
+      />
+    </button>
+  </div>
   <div class="text-sm text-gray-600">表示名：{$user?.displayName}</div>
   <div class="text-sm text-gray-600">ユーザーID：{$user?.uniqueName}</div>
   <button
@@ -88,6 +84,19 @@
   <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
     <div class="bg-white p-6 rounded shadow-md w-[90%] max-w-md space-y-6">
       <h2 class="text-base font-semibold">プロフィールを編集</h2>
+      <div class="flex items-center gap-4">
+        <img
+          src={$user?.profileImageUrl || '/onigiri_nori.png'}
+          alt="プロフィール画像"
+          class="w-16 h-16 rounded-full object-cover"
+        />
+        <div>
+          <label class="text-sm text-blue-600 underline cursor-pointer">
+            画像を変更
+            <input type="file" accept="image/*" class="hidden" on:change={onSelectFile} />
+          </label>
+        </div>
+      </div>
       <form on:submit|preventDefault={onUpdate} class="space-y-4">
         <div>
           <label for="display-name" class="text-sm font-medium text-gray-900">表示名</label>
@@ -129,5 +138,16 @@
         </div>
       </form>
     </div>
+  </div>
+{/if}
+{#if showImageModal}
+  <div class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <button on:click={() => (showImageModal = false)} class="block p-0 border-none bg-transparent">
+      <img
+        src={$user?.profileImageUrl || '/onigiri_nori.png'}
+        alt="拡大プロフィール画像"
+        class="display-inline max-w-[90%] max-h-[90%] md:max-w-[30%] md:max-h-[30%] rounded-lg shadow-lg"
+      />
+    </button>
   </div>
 {/if}
