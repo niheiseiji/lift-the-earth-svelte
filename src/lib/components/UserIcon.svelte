@@ -47,9 +47,13 @@
   });
 </script>
 
-<div class="relative" bind:this={dropdownRef}>
+<div class="relative flex items-center" bind:this={dropdownRef}>
   <button on:click={toggleDropdown}>
-    <CircleUser size={30} class="text-gray-500 cursor-pointer translate-y-[3px]" />
+    <img
+      src={$user?.profileImageUrl || '/onigiri_nori.png'}
+      alt="プロフィール画像"
+      class="block w-[32px] h-[32px] min-w-[32px] rounded-full object-cover cursor-pointer"
+    />
   </button>
 
   {#if showDropdown}

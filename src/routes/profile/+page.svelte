@@ -49,35 +49,34 @@
 </script>
 
 <Header>
-  <div slot="left">
+  <div slot="left" class="flex items-center">
     <a href="/">
       <ArrowLeft size={28} />
     </a>
   </div>
-  <div slot="right" class="flex items-center gap-2">
-    <UserIcon />
-  </div>
 </Header>
 
-<div class="m-4 space-y-4">
-  <div class="text-lg font-semibold">プロフィール</div>
-  <div class="flex items-center gap-4">
-    <button on:click={() => (showImageModal = true)}>
-      <img
-        src={$user?.profileImageUrl || '/onigiri_nori.png'}
-        alt="プロフィール画像"
-        class="w-16 h-16 rounded-full object-cover cursor-pointer"
-      />
-    </button>
+<div class="mt-4">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md space-y-1">
+    <div class="flex flex-col items-center gap-2 mx-1">
+      <button on:click={() => (showImageModal = true)}>
+        <img
+          src={$user?.profileImageUrl || '/onigiri_nori.png'}
+          alt="プロフィール画像"
+          class="w-32 h-32 rounded-full object-cover cursor-pointer"
+        />
+      </button>
+      <div class="text-md text-black">{$user?.displayName}</div>
+      <div class="text-sm text-gray-600">{$user?.uniqueName}</div>
+      <button
+        on:click={openModal}
+        class="mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
+       bg-blue-700 hover:bg-blue-500"
+      >
+        編集
+      </button>
+    </div>
   </div>
-  <div class="text-sm text-gray-600">表示名：{$user?.displayName}</div>
-  <div class="text-sm text-gray-600">ユーザーID：{$user?.uniqueName}</div>
-  <button
-    on:click={openModal}
-    class="mt-4 px-4 py-2 bg-blue-700 text-white text-sm rounded hover:bg-blue-800"
-  >
-    編集
-  </button>
 </div>
 
 {#if showEditModal}
@@ -142,11 +141,11 @@
 {/if}
 {#if showImageModal}
   <div class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <button on:click={() => (showImageModal = false)} class="block p-0 border-none bg-transparent">
+    <button on:click={() => (showImageModal = false)} class=" p-0 border-none bg-transparent">
       <img
         src={$user?.profileImageUrl || '/onigiri_nori.png'}
         alt="拡大プロフィール画像"
-        class="display-inline max-w-[90%] max-h-[90%] md:max-w-[30%] md:max-h-[30%] rounded-lg shadow-lg"
+        class="inline max-w-[90%] max-h-[90%] md:max-w-[30%] md:max-h-[30%] rounded-lg shadow-lg"
       />
     </button>
   </div>
