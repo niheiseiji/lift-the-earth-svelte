@@ -90,7 +90,7 @@
   </div>
 </Header>
 
-<div class="flex text-sm font-semibold mt-1">
+<div class="flex text-sm font-semibold mt-1 max-w-md mx-auto">
   <button
     on:click={() => (selectedTab = 'you')}
     class="flex-1 text-center py-2 transition-colors duration-200
@@ -143,8 +143,11 @@
           </div>
 
           <!-- TODO: レベリングシステム -->
-          <!-- <div class="flex flex-col items-center justify-center rounded px-4 py-2 text-center">
-          </div> -->
+          <div class="flex flex-col items-center justify-center rounded px-4 py-2 text-center">
+            <img class="mt-5 w-15" src="/orangeman_LV1.gif" alt="" />
+            <span class="mt-2 text-xs text-gray-500">オレンジマン</span>
+            <span class="text-xs text-gray-500">Lv.1</span>
+          </div>
         </div>
       </div>
 
@@ -163,7 +166,7 @@
                   class="absolute left-3/4 top-full mt-2 -translate-x-1/2 w-64 rounded bg-gray-800 px-3 py-2 text-sm text-white shadow-lg z-10"
                   role="tooltip"
                 >
-                  BIG3の記録を登録済みのメニューから抽出します。シュワちゃんの記録は837kgだとか...👱‍♂️
+                  BIG3のMAX記録を登録済みのトレーニングメニューから抽出します👱‍♂️
                 </div>
               {/if}
               <!-- <span class="text-gray-400 text-xs"><CircleHelp size={14} /></span> -->
