@@ -1,6 +1,47 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /**
+ * リフレッシュトークンを使って新しいアクセストークン（JWT）を取得します。
+ *
+ * @throws {Error} リフレッシュトークンが無効な場合
+ * @returns {Promise<void>}
+ */
+const refreshToken = async () => {
+  const res = await fetch(`${BASE_URL}/auth/refresh-token`, {
+    method: 'POST',
+    credentials: 'include'
+  });
+
+  if (!res.ok) {
+    throw new Error('リフレッシュトークンが無効です');
+  }
+};
+
+/**
+ * JWTの期限切れ時に自動で再認証を試みるfetchラッパーです。
+ *
+ * @param {RequestInfo} input - fetchのURLまたはRequestオブジェクト
+ * @param {RequestInit} [init={}] - fetchの初期化オプション
+ * @param {boolean} [retry=true] - 再試行を行うかどうか（内部制御用）
+ * @returns {Promise<Response>} - fetchのレスポンス
+ * @throws {Error} 認証が切れており、再ログインが必要な場合
+ */
+const authFetch = async (input, init = {}, retry = true) => {
+  const res = await fetch(input, { ...init, credentials: 'include' });
+
+  if (res.status === 401 && retry) {
+    try {
+      await refreshToken();
+      return await authFetch(input, init, false); // 1回だけリトライ
+    } catch (e) {
+      throw new Error('認証が切れました。再ログインしてください。');
+    }
+  }
+
+  return res;
+};
+
+/**
  * ログインAPIを呼び出します
  * @param {string} email
  * @param {string} password
@@ -57,7 +98,7 @@ export const logout = async () => {
  * @returns {Promise<{id: number, email: string, name: string, createdAt: string}>}
  */
 export const fetchMe = async () => {
-  const res = await fetch(`${BASE_URL}/user/me`, {
+  const res = await authFetch(`${BASE_URL}/user/me`, {
     credentials: 'include'
   });
 
@@ -73,7 +114,7 @@ export const fetchMe = async () => {
  * @param {string} name
  */
 export const updateUserSetting = async ({ displayName, uniqueName }) => {
-  const res = await fetch(`${BASE_URL}/user/setting`, {
+  const res = await authFetch(`${BASE_URL}/user/setting`, {
     method: 'PUT',
     credentials: 'include',
     headers: {
@@ -95,7 +136,7 @@ export const uploadProfileImage = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
 
-  const res = await fetch(`${BASE_URL}/user/upload-profile-image`, {
+  const res = await authFetch(`${BASE_URL}/user/upload-profile-image`, {
     method: 'POST',
     credentials: 'include',
     body: formData
@@ -111,7 +152,7 @@ export const uploadProfileImage = async (file) => {
  * @returns {Promise<any>}
  */
 export const createTraining = async (trainingData) => {
-  const res = await fetch(`${BASE_URL}/trainings`, {
+  const res = await authFetch(`${BASE_URL}/trainings`, {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -132,7 +173,7 @@ export const createTraining = async (trainingData) => {
  * @returns {Promise<TrainingDto[]>}
  */
 export const fetchTrainings = async () => {
-  const res = await fetch(`${BASE_URL}/trainings`, {
+  const res = await authFetch(`${BASE_URL}/trainings`, {
     credentials: 'include'
   });
 
@@ -149,7 +190,7 @@ export const fetchTrainings = async () => {
  * @returns {Promise<TrainingDto>}
  */
 export const fetchTrainingById = async (id) => {
-  const res = await fetch(`${BASE_URL}/trainings/${id}`, {
+  const res = await authFetch(`${BASE_URL}/trainings/${id}`, {
     credentials: 'include'
   });
 
@@ -167,7 +208,7 @@ export const fetchTrainingById = async (id) => {
  * @returns {Promise<TrainingDto>}
  */
 export const updateTraining = async (id, trainingData) => {
-  const res = await fetch(`${BASE_URL}/trainings/${id}`, {
+  const res = await authFetch(`${BASE_URL}/trainings/${id}`, {
     method: 'PUT',
     credentials: 'include',
     headers: {
@@ -189,7 +230,7 @@ export const updateTraining = async (id, trainingData) => {
  * @returns {Promise<void>}
  */
 export const deleteTraining = async (id) => {
-  const res = await fetch(`${BASE_URL}/trainings/${id}`, {
+  const res = await authFetch(`${BASE_URL}/trainings/${id}`, {
     method: 'DELETE',
     credentials: 'include'
   });
@@ -204,7 +245,7 @@ export const deleteTraining = async (id) => {
  * @returns {Promise<TrainingSummaryDto>}
  */
 export const fetchTrainingSummary = async () => {
-  const res = await fetch(`${BASE_URL}/trainings/summary`, {
+  const res = await authFetch(`${BASE_URL}/trainings/summary`, {
     credentials: 'include'
   });
 
@@ -221,7 +262,7 @@ export const fetchTrainingSummary = async () => {
  * @returns {Promise<any>}
  */
 export const createPresetTraining = async (presetData) => {
-  const res = await fetch(`${BASE_URL}/preset-trainings`, {
+  const res = await authFetch(`${BASE_URL}/preset-trainings`, {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -242,7 +283,7 @@ export const createPresetTraining = async (presetData) => {
  * @returns {Promise<PresetTrainingDto[]>}
  */
 export const fetchPresetTrainings = async () => {
-  const res = await fetch(`${BASE_URL}/preset-trainings`, {
+  const res = await authFetch(`${BASE_URL}/preset-trainings`, {
     credentials: 'include'
   });
 
@@ -259,7 +300,7 @@ export const fetchPresetTrainings = async () => {
  * @returns {Promise<PresetTrainingDto>}
  */
 export const fetchPresetTrainingById = async (id) => {
-  const res = await fetch(`${BASE_URL}/preset-trainings/${id}`, {
+  const res = await authFetch(`${BASE_URL}/preset-trainings/${id}`, {
     credentials: 'include'
   });
 
@@ -277,7 +318,7 @@ export const fetchPresetTrainingById = async (id) => {
  * @returns {Promise<PresetTrainingDto>}
  */
 export const updatePresetTraining = async (id, presetData) => {
-  const res = await fetch(`${BASE_URL}/preset-trainings/${id}`, {
+  const res = await authFetch(`${BASE_URL}/preset-trainings/${id}`, {
     method: 'PUT',
     credentials: 'include',
     headers: {
@@ -299,7 +340,7 @@ export const updatePresetTraining = async (id, presetData) => {
  * @returns {Promise<void>}
  */
 export const deletePresetTraining = async (id) => {
-  const res = await fetch(`${BASE_URL}/preset-trainings/${id}`, {
+  const res = await authFetch(`${BASE_URL}/preset-trainings/${id}`, {
     method: 'DELETE',
     credentials: 'include'
   });
