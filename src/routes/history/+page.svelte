@@ -20,13 +20,19 @@
   export let data;
   const { trainings, trainingSummary, isTodayRegistered } = data;
 
-  const goToTraining = () => {
-    goto('/training/new');
-  };
-
-  const goToDetail = (id) => {
-    goto(`/training/${id}`);
-  };
+  onMount(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('saved') === '1') {
+      showSavedMessage = true;
+      url.searchParams.delete('saved');
+      history.replaceState(null, '', url);
+    }
+    if (url.searchParams.get('updated') === '1') {
+      showToast('更新しました！', 'success');
+      url.searchParams.delete('updated');
+      history.replaceState(null, '', url);
+    }
+  });
 
   const toggleTooltip = () => {
     // 表示中なら何もしない（外クリックで閉じる）
@@ -42,21 +48,6 @@
       showTooltip = false;
     }
   };
-
-  onMount(() => {
-    const url = new URL(window.location.href);
-    if (url.searchParams.get('saved') === '1') {
-      showSavedMessage = true;
-      url.searchParams.delete('saved');
-      history.replaceState(null, '', url);
-    }
-    if (url.searchParams.get('updated') === '1') {
-      showToast('更新しました！', 'success');
-      url.searchParams.delete('updated');
-      history.replaceState(null, '', url);
-    }
-  });
-
   onMount(() => {
     window.addEventListener('click', handleClickOutside);
   });
@@ -76,7 +67,7 @@
   <div slot="right" class="flex items-center gap-2">
     <button
       disabled={isTodayRegistered}
-      on:click={goToTraining}
+      on:click={() => goto('/training/new')}
       class="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer
        {isTodayRegistered ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}"
     >
@@ -89,5 +80,3 @@
     <UserIcon />
   </div>
 </Header>
-
-<div class="flex text-sm font-semibold mt-1 max-w-md mx-auto">history</div>

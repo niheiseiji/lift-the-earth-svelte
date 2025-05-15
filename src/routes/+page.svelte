@@ -20,14 +20,6 @@
   export let data;
   const { trainings, trainingSummary, isTodayRegistered } = data;
 
-  // const goToTraining = () => {
-  //   goto('/training/new');
-  // };
-
-  // const goToDetail = (id) => {
-  //   goto(`/training/${id}`);
-  // };
-
   const toggleTooltip = () => {
     // 表示中なら何もしない（外クリックで閉じる）
     if (showTooltip) return;
