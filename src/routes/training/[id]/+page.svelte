@@ -193,9 +193,12 @@
     <div class="bg-white p-5 rounded shadow-md w-80 space-y-4">
       <h2 class="text-sm font-semibold">本当に削除しますか？</h2>
       <div class="flex justify-end gap-2">
-        <button class="text-sm text-gray-500" on:click={cancelDelete}>キャンセル</button>
-        <button class="text-sm bg-red-600 text-white px-3 py-1 rounded" on:click={confirmDelete}
-          >削除</button
+        <button class="text-sm text-gray-500 cursor-pointer" on:click={cancelDelete}
+          >キャンセル</button
+        >
+        <button
+          class="text-sm bg-red-600 text-white px-3 py-1 rounded cursor-pointer"
+          on:click={confirmDelete}>削除</button
         >
       </div>
     </div>
