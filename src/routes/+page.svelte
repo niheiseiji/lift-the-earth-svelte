@@ -20,13 +20,13 @@
   export let data;
   const { trainings, trainingSummary, isTodayRegistered } = data;
 
-  const goToTraining = () => {
-    goto('/training/new');
-  };
+  // const goToTraining = () => {
+  //   goto('/training/new');
+  // };
 
-  const goToDetail = (id) => {
-    goto(`/training/${id}`);
-  };
+  // const goToDetail = (id) => {
+  //   goto(`/training/${id}`);
+  // };
 
   const toggleTooltip = () => {
     // 表示中なら何もしない（外クリックで閉じる）
@@ -76,7 +76,7 @@
   <div slot="right" class="flex items-center gap-2">
     <button
       disabled={isTodayRegistered}
-      on:click={goToTraining}
+      on:click={() => goto('/training/new')}
       class="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer
        {isTodayRegistered ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}"
     >
@@ -141,7 +141,7 @@
           <!-- TODO: レベリングシステム -->
           <div class="flex flex-col items-center justify-center rounded px-4 py-2 text-center">
             <img class="mt-6 w-15" src="/orangeman_LV1.gif" alt="" />
-            <span class="mt-2 text-xs text-gray-500">TODO:開発中</span>
+            <span class="mt-2 text-xs text-gray-500">準備中</span>
           </div>
         </div>
       </div>
@@ -190,8 +190,10 @@
         <!-- ヘッダー -->
         <div class="flex justify-between items-center mb-2">
           <h2 class="text-sm font-bold">直近のトレーニング</h2>
-          <!-- TODO: 実装 -->
-          <!-- <button class="text-blue-600 text-sm font-semibold">すべて見る</button> -->
+          <button
+            on:click={() => goto(`/history`)}
+            class="text-blue-600 text-xs font-semibold cursor-pointer">すべて見る</button
+          >
         </div>
 
         <!-- トレーニングリスト（上位3件） -->
@@ -203,7 +205,7 @@
                   {formatDate(training.performedAt)}
                 </div>
                 <button
-                  on:click={goToDetail(training.id)}
+                  on:click={() => goto(`/training/${training.id}`)}
                   class="text-blue-600 text-xs cursor-pointer font-bold">詳細</button
                 >
               </div>
@@ -226,7 +228,7 @@
       </div>
       <button
         disabled={isTodayRegistered}
-        on:click={goToTraining}
+        on:click={() => goto('/training/new')}
         class="mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer
        {isTodayRegistered ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}"
       >
