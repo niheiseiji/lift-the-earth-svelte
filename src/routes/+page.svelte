@@ -77,7 +77,7 @@
     <button
       disabled={isTodayRegistered}
       on:click={goToTraining}
-      class="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
+      class="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer
        {isTodayRegistered ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}"
     >
       {#if isTodayRegistered}
@@ -93,7 +93,7 @@
 <div class="flex text-sm font-semibold mt-1 max-w-md mx-auto">
   <button
     on:click={() => (selectedTab = 'you')}
-    class="flex-1 text-center py-2 transition-colors duration-200
+    class="flex-1 text-center py-2 transition-colors duration-200 cursor-pointer
       {selectedTab === 'you' ? 'text-blue-600' : 'text-gray-600'}"
   >
     あなた
@@ -104,7 +104,7 @@
   <div class="my-2 border-l-1 border-gray-300"></div>
   <button
     on:click={() => (selectedTab = 'group')}
-    class="flex-1 text-center py-2 transition-colors duration-200
+    class="flex-1 text-center py-2 transition-colors duration-200 cursor-pointer
       {selectedTab === 'group' ? 'text-blue-600' : 'text-gray-600'}"
   >
     グループ
@@ -124,10 +124,6 @@
             <div class="flex items-center gap-1">
               <h2 class="font-bold">データ</h2>
             </div>
-            <div class="flex justify-between w-40">
-              <span>総リフト重量</span>
-              <span>{(trainingSummary?.totalLiftedWeightKg / 1000).toFixed(1)}t</span>
-            </div>
             <div>トレーニング回数</div>
             <div class="space-y-1">
               <div class="flex justify-between w-40">
@@ -144,15 +140,14 @@
 
           <!-- TODO: レベリングシステム -->
           <div class="flex flex-col items-center justify-center rounded px-4 py-2 text-center">
-            <img class="mt-5 w-15" src="/orangeman_LV1.gif" alt="" />
-            <span class="mt-2 text-xs text-gray-500">オレンジマン</span>
-            <span class="text-xs text-gray-500">Lv.1</span>
+            <img class="mt-6 w-15" src="/orangeman_LV1.gif" alt="" />
+            <span class="mt-2 text-xs text-gray-500">TODO:開発中</span>
           </div>
         </div>
       </div>
 
       <!-- BIG3カード -->
-      <div class="rounded border border-gray-200 p-4 bg-white w-full">
+      <!-- <div class="rounded border border-gray-200 p-4 bg-white w-full">
         <div class="flex justify-between items-start">
           <div class="text-sm space-y-1">
             <div class="relative flex items-center gap-1">
@@ -169,7 +164,6 @@
                   BIG3のMAX記録を登録済みのトレーニングメニューから抽出します👱‍♂️
                 </div>
               {/if}
-              <!-- <span class="text-gray-400 text-xs"><CircleHelp size={14} /></span> -->
             </div>
             <div class="flex justify-between w-40">
               <span>ベンチプレス</span><span>{trainingSummary?.maxBenchPress}kg</span>
@@ -189,7 +183,7 @@
             <span class="text-xs text-gray-500">kg</span>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- current training & start btn -->
       <div class="rounded border border-gray-200 p-2 bg-white w-full">
@@ -202,14 +196,15 @@
 
         <!-- トレーニングリスト（上位3件） -->
         {#if trainings.length > 0}
-          {#each trainings.slice(0, 3) as training}
+          {#each trainings.slice(0, 5) as training}
             <div class="py-2 border-t border-gray-100 text-sm">
               <div class="flex justify-between items-center mb-1">
                 <div class="text-gray-500">
                   {formatDate(training.performedAt)}
                 </div>
-                <button on:click={goToDetail(training.id)} class="text-blue-600 text-xs"
-                  >詳細</button
+                <button
+                  on:click={goToDetail(training.id)}
+                  class="text-blue-600 text-xs cursor-pointer font-bold">詳細</button
                 >
               </div>
               <div class="text-gray-800">
@@ -232,7 +227,7 @@
       <button
         disabled={isTodayRegistered}
         on:click={goToTraining}
-        class="mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
+        class="mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer
        {isTodayRegistered ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}"
       >
         {#if isTodayRegistered}

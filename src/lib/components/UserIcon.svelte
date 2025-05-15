@@ -57,7 +57,9 @@
   </button>
 
   {#if showDropdown}
-    <div class="absolute text-gray-700 top-full right-0 mt-2 z-10 w-44 bg-gray-100 rounded shadow">
+    <div
+      class="absolute border border-gray-200 text-gray-700 top-full right-0 mt-1 z-10 w-44 bg-white rounded shadow"
+    >
       <div class="px-4 py-3 text-sm">
         <div class="font-medium truncate">{$user.displayName}</div>
         <div class="font-medium truncate">{$user.uniqueName}</div>
@@ -65,18 +67,21 @@
       <hr class="mx-2 border border-gray-300" />
       <ul class="py-2 text-sm">
         <li>
-          <button class="w-full text-left px-4 py-2" on:click={() => handlePreset()}
-            >プリセット</button
+          <button
+            class="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            on:click={() => handlePreset()}>プリセット</button
           >
         </li>
         <li>
-          <button class="w-full text-left px-4 py-2" on:click={() => handleUserSetting()}
-            >プロフィール</button
+          <button
+            class="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            on:click={() => handleUserSetting()}>プロフィール</button
           >
         </li>
         <li>
-          <button class="w-full text-left px-4 py-2" on:click={() => handleSelect('logout')}
-            >ログアウト</button
+          <button
+            class="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            on:click={() => handleSelect('logout')}>ログアウト</button
           >
         </li>
       </ul>

@@ -103,7 +103,7 @@
     <PresetButton on:register={openSaveModal} on:load={openLoadPresetList} />
     <button
       on:click={saveTraining}
-      class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
+      class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px] cursor-pointer"
     >
       <span>完了💪</span>
     </button>

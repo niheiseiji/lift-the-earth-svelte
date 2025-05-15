@@ -44,7 +44,7 @@
         <div class="text-center">
           <button
             on:click={loginWithGoogle}
-            class="w-[330px] flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50"
+            class="w-[330px] flex cursor-pointer items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50"
           >
             <svg class="w-5 h-5" viewBox="0 0 533.5 544.3">
               <path

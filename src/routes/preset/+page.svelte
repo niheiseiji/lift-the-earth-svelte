@@ -68,7 +68,7 @@
     <h2 class="font-bold">登録済みプリセット</h2>
     <button
       on:click={goToCreatePreset}
-      class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
+      class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px] cursor-pointer"
     >
       <span>プリセット追加👩‍💻</span>
     </button>
@@ -107,14 +107,14 @@
                   >
                     <button
                       type="button"
-                      class="px-3 py-2 hover:bg-gray-100 text-left w-full text-xs"
+                      class="px-3 py-2 hover:bg-gray-100 text-left w-full text-sm cursor-pointer"
                       on:click={() => goto(`/preset/${preset.id}`)}
                     >
                       編集
                     </button>
                     <button
                       type="button"
-                      class="px-3 py-2 hover:bg-red-100 text-red-600 text-left w-full text-xs"
+                      class="px-3 py-2 hover:bg-red-100 text-red-600 text-left w-full text-sm cursor-pointer"
                       on:click={() => (confirmDeleteId = preset.id)}
                     >
                       削除
@@ -137,11 +137,13 @@
     <div class="bg-white p-5 rounded shadow-md space-y-4 w-80">
       <h2 class="text-sm font-semibold">本当に削除しますか？</h2>
       <div class="flex justify-end gap-2">
-        <button class="text-sm text-gray-500" on:click={() => (confirmDeleteId = null)}
-          >キャンセル</button
+        <button
+          class="text-sm text-gray-500 cursor-pointer"
+          on:click={() => (confirmDeleteId = null)}>キャンセル</button
         >
-        <button class="text-sm bg-red-600 text-white px-3 py-1 rounded" on:click={confirmDelete}
-          >削除</button
+        <button
+          class="text-sm bg-red-600 text-white px-3 py-1 rounded cursor-pointer"
+          on:click={confirmDelete}>削除</button
         >
       </div>
     </div>

@@ -36,7 +36,7 @@
 <div class="relative preset-button">
   <button
     type="button"
-    class="border border-blue-700 text-blue-700 hover:bg-blue-200 rounded text-sm px-3 inline-flex items-center h-[35px]"
+    class="border border-blue-700 text-blue-700 hover:bg-blue-200 rounded text-sm px-3 inline-flex items-center h-[35px] cursor-pointer"
     on:click={toggleDropdown}
   >
     <span>プリセット</span>
@@ -50,14 +50,14 @@
     >
       <button
         type="button"
-        class="block w-full text-left px-4 py-2 hover:bg-gray-100"
+        class="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
         on:click={registerCurrent}
       >
         現在のメニューを登録
       </button>
       <button
         type="button"
-        class="block w-full text-left px-4 py-2 hover:bg-gray-100"
+        class="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
         on:click={loadList}
       >
         プリセットからロード

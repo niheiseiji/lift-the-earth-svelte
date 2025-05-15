@@ -134,14 +134,14 @@
   <div slot="right" class="flex items-center gap-4">
     <button
       on:click={openDeleteConfirm}
-      class="text-red-600 hover:bg-red-200 rounded border border-red-500 text-sm px-3 inline-flex items-center h-[35px]"
+      class="text-red-600 hover:bg-red-200 rounded border border-red-500 text-sm px-3 inline-flex items-center h-[35px] cursor-pointer"
     >
       <span>削除</span>
     </button>
     <PresetButton on:register={openSaveModal} on:load={openLoadPresetList} />
     <button
       on:click={update}
-      class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px]"
+      class="text-white bg-blue-700 hover:bg-blue-800 rounded text-sm px-3 inline-flex items-center h-[35px] cursor-pointer"
     >
       <span>更新💪</span>
     </button>
