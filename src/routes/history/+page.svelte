@@ -20,7 +20,8 @@
   let selectedWeekTrainings = [];
 
   // performedAtからyyyy-MM-dd形式でセット作成
-  const normalizeDate = (isoString) => formatDate(new Date(isoString), 'yyyy-MM-dd');
+  const normalizeDate = (isoString) => toYmd(new Date(isoString));
+
   const updateTrainingDatesSet = () => {
     trainingDatesSet = new Set(trainings.map((t) => normalizeDate(t.performedAt)));
   };
@@ -97,8 +98,22 @@
   };
 
   // 日付判定
-  const isToday = (date) => formatDate(date, 'yyyy-MM-dd') === formatDate(today, 'yyyy-MM-dd');
-  const isTrained = (date) => trainingDatesSet.has(formatDate(date, 'yyyy-MM-dd'));
+  const isToday = (date) => toYmd(date) === toYmd(today);
+
+  // トレーニング日かどうか判定
+  const isTrained = (date) => {
+    const key = toYmd(date);
+    return trainingDatesSet.has(key);
+  };
+
+  // ユーティリティ
+  const toYmd = (date) => {
+    const y = date.getFullYear();
+    const m = (date.getMonth() + 1).toString().padStart(2, '0');
+    const d = date.getDate().toString().padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  };
+
   const isCurrentMonth = (date) =>
     date.getMonth() === currentMonth && date.getFullYear() === currentYear;
 
@@ -126,7 +141,16 @@
   onMount(() => {
     updateTrainingDatesSet();
     updateMonth();
-    setTimeout(() => scrollToTop(), 10);
+
+    setTimeout(() => {
+      scrollToTop();
+
+      // ✅ 現在日が含まれる週を選択
+      const todayIdx = weeks.findIndex((week) => week.some((day) => toYmd(day) === toYmd(today)));
+      if (todayIdx !== -1) {
+        selectWeek(todayIdx);
+      }
+    }, 10);
   });
 
   $: updateTrainingDatesSet();
@@ -161,12 +185,9 @@
   <button class="px-2 text-lg ml-auto" on:click={() => changeMonth(1)}>&gt;</button>
 </div>
 
-<div
-  bind:this={scrollContainer}
-  class="overflow-y-scroll h-[400px] px-2 bg-white"
-  style="max-height:400px;"
->
-  <div class="grid grid-cols-7 text-xs text-center mb-2">
+<div bind:this={scrollContainer} class="px-2 bg-white" style="max-height:400px;">
+  <div class="grid grid-cols-8 text-xs text-center mb-2">
+    <div class="text-gray-400"></div>
     <div class="text-gray-400">日</div>
     <div class="text-gray-400">月</div>
     <div class="text-gray-400">火</div>
@@ -194,10 +215,10 @@
               {isCurrentMonth(day) ? '' : 'text-gray-300'}
               {isTrained(day) && isCurrentMonth(day) ? 'bg-green-600 text-white' : ''}
               {isToday(day) && isCurrentMonth(day) ? 'underline font-bold' : ''}
-              {selectedWeekIndex === widx ? 'ring-2 ring-blue-300' : ''}
+              {selectedWeekIndex === widx ? 'ring-2 ring-blue-200' : ''}
             "
             style="
-              background: {isTrained(day) && isCurrentMonth(day) ? '#16a34a' : 'transparent'};
+              background: {isTrained(day) && isCurrentMonth(day) ? '#008B6D' : 'transparent'};
               color: {isCurrentMonth(day) ? (isTrained(day) ? '#fff' : '#222') : '#bbb'};
             "
             disabled={!isCurrentMonth(day)}
@@ -214,7 +235,7 @@
 {#if selectedWeekIndex !== null}
   <div class="p-4">
     <h2 class="text-sm font-bold mb-2">
-      {currentYear}年{currentMonth + 1}月 {weekNumbers[selectedWeekIndex]}週のトレーニング
+      {`${currentYear}年${currentMonth + 1}月(${weekNumbers[selectedWeekIndex]}週)のトレーニング`}
     </h2>
     {#if selectedWeekTrainings.length > 0}
       {#each selectedWeekTrainings as training}
