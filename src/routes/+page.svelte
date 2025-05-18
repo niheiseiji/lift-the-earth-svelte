@@ -265,11 +265,11 @@
         <button class="pl-2 text-lg cursor-pointer" on:click={() => changeMonth(-1)}
           ><ChevronLeft /></button
         >
-        <button class="px-2 text-lg cursor-pointer" on:click={() => changeMonth(1)}
+        <button class="pl-4 text-lg cursor-pointer" on:click={() => changeMonth(1)}
           ><ChevronRight /></button
         >
         <button
-          class="ml-2 px-2 py-1 border border-gray-400 rounded text-xs bg-white hover:bg-gray-50 cursor-pointer"
+          class="ml-4 px-2 py-1 border border-gray-400 rounded text-xs bg-white hover:bg-gray-50 cursor-pointer"
           on:click={scrollToCurrentMonth}
         >
           今月へ
