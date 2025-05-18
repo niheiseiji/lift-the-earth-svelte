@@ -5,13 +5,9 @@ export const load = async () => {
   const trainingSummary = await fetchTrainingSummary();
 
   const today = new Date().toISOString().slice(0, 10);
-  const isTodayRegistered = trainings.some(
-    (t) => t.performedAt.slice(0, 10) === today
-  );
 
   return {
     trainings,
     trainingSummary,
-    isTodayRegistered
   };
 };

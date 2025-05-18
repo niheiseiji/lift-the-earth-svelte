@@ -18,7 +18,7 @@
   let tooltipEl;
 
   export let data;
-  const { trainings, trainingSummary, isTodayRegistered } = data;
+  const { trainings, trainingSummary } = data;
 
   const toggleTooltip = () => {
     // 表示中なら何もしない（外クリックで閉じる）
@@ -95,25 +95,35 @@
 
   // カレンダー生成
   const updateMonth = () => {
-    // 月初、月末
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
     const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
 
-    // 1行目: その月1日を含む週の日曜から
     const startDate = new Date(firstDayOfMonth);
     startDate.setDate(firstDayOfMonth.getDate() - firstDayOfMonth.getDay());
 
-    // 最大6週分まで表示（1ヶ月＝42マス）
     weeks = [];
     let cur = new Date(startDate);
-    for (let i = 0; i < 6; i++) {
+    const maxWeeks = 6;
+
+    for (let i = 0; i < maxWeeks; i++) {
       const week = [];
+      let containsCurrentMonthDay = false;
+
       for (let j = 0; j < 7; j++) {
-        week.push(new Date(cur));
+        const day = new Date(cur);
+        week.push(day);
+        if (day.getMonth() === currentMonth && day.getFullYear() === currentYear) {
+          containsCurrentMonthDay = true;
+        }
         cur.setDate(cur.getDate() + 1);
       }
-      weeks.push(week);
+
+      // ✅ 現在表示中の月に1日も含まれない週は除外
+      if (containsCurrentMonthDay) {
+        weeks.push(week);
+      }
     }
+
     weekNumbers = getLocalWeekNumbers(weeks);
   };
 
@@ -215,16 +225,11 @@
 
   <div slot="right" class="flex items-center gap-2">
     <button
-      disabled={isTodayRegistered}
       on:click={() => goto('/training/new')}
       class="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer
-       {isTodayRegistered ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}"
+       bg-blue-700 hover:bg-blue-500"
     >
-      {#if isTodayRegistered}
-        完了⭐
-      {:else}
-        トレーニング開始🏋️‍♀️
-      {/if}
+      トレーニング開始🏋️‍♀️
     </button>
     <UserIcon />
   </div>
@@ -241,7 +246,7 @@
       <div class="mt-1 mx-auto w-10 border-b-2 border-blue-600"></div>
     {/if}
   </button>
-  <div class="my-2 border-l-1 border-gray-300"></div>
+  <div class="my-2 border-l-1 border-gray-200"></div>
   <button
     on:click={() => (selectedTab = 'group')}
     class="flex-1 text-center py-2 transition-colors duration-200 cursor-pointer
@@ -257,9 +262,7 @@
 {#if selectedTab === 'you'}
   <div class="flex min-h-full flex-col justify-center px-2 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md space-y-1">
-      <div
-        class="flex items-center text-sm font-bold px-4 py-2 sticky top-0 bg-white z-10 border-b"
-      >
+      <div class="flex items-center text-sm font-bold px-4 py-2 sticky top-0 bg-white z-10">
         <button class="px-2 text-lg cursor-pointer" on:click={() => changeMonth(-1)}
           ><ChevronLeft /></button
         >
@@ -293,7 +296,7 @@
           <div class="flex mb-1" class:selected={selectedWeekIndex === widx}>
             <!-- 週番号クリックで週選択 -->
             <button
-              class="w-12 text-right text-xs text-gray-500 pr-1 hover:underline focus:underline cursor-pointer"
+              class="w-12 text-right text-xs text-gray-500 pr-2 hover:underline focus:underline cursor-pointer"
               style="min-width:3rem;"
               on:click={() => selectWeek(widx)}
               aria-label="週を選択"
@@ -304,17 +307,16 @@
               {#each week as day}
                 <button
                   class="
-              w-full py-1 rounded text-center cursor-pointer
-              {isCurrentMonth(day) ? '' : 'text-gray-300'}
-              {isTrained(day) && isCurrentMonth(day) ? 'bg-green-600 text-white' : ''}
-              {isToday(day) && isCurrentMonth(day) ? 'underline font-bold' : ''}
-              {selectedWeekIndex === widx ? 'ring-2 ring-blue-200' : ''}
-            "
+                    w-full py-1 rounded text-center cursor-pointer text-sm
+                    {isCurrentMonth(day) ? '' : 'text-gray-300'}
+                    {isTrained(day) ? 'text-white' : ''}
+                    {isToday(day) && isCurrentMonth(day) ? 'underline font-bold' : ''}
+                    {selectedWeekIndex === widx ? 'ring-2 ring-blue-200' : ''}
+                  "
                   style="
-              background: {isTrained(day) && isCurrentMonth(day) ? '#008B6D' : 'transparent'};
-              color: {isCurrentMonth(day) ? (isTrained(day) ? '#fff' : '#222') : '#bbb'};
-            "
-                  disabled={!isCurrentMonth(day)}
+                    background:
+                    {isTrained(day) ? '#008B6D' : 'transparent'};
+                    color: {isTrained(day) ? '#fff' : isCurrentMonth(day) ? '#222' : '#bbb'};"
                   on:click={() => selectWeek(widx)}
                 >
                   {day.getDate()}
@@ -328,11 +330,11 @@
       {#if selectedWeekIndex !== null}
         <div class="p-4">
           <h2 class="text-sm font-bold mb-2">
-            {`${currentYear}年${currentMonth + 1}月(${weekNumbers[selectedWeekIndex]}週)のトレーニング`}
+            {`${currentYear}年${currentMonth + 1}月(第${weekNumbers[selectedWeekIndex]}週)のトレーニング`}
           </h2>
           {#if selectedWeekTrainings.length > 0}
             {#each selectedWeekTrainings as training}
-              <div class="py-2 border-t border-gray-100 text-sm">
+              <div class="py-2 border-t border-gray-200 text-sm">
                 <div class="flex justify-between items-center mb-1">
                   <div class="text-gray-500">{formatDate(training.performedAt, 'yyyy-MM-dd')}</div>
                   <button
@@ -357,16 +359,10 @@
       {/if}
 
       <button
-        disabled={isTodayRegistered}
         on:click={() => goto('/training/new')}
-        class="mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer
-       {isTodayRegistered ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}"
+        class="mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer bg-blue-700 hover:bg-blue-500"
       >
-        {#if isTodayRegistered}
-          今日のトレーニング受付が完了しました⭐
-        {:else}
-          トレーニング開始🏋️‍♀️
-        {/if}
+        トレーニング開始🏋️‍♀️
       </button>
     </div>
   </div>
