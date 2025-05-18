@@ -263,19 +263,19 @@
   <div class="flex min-h-full flex-col justify-center px-2 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md space-y-1">
       <div class="flex items-center text-sm font-bold px-4 py-2 sticky top-0 bg-white z-10">
-        <button class="px-2 text-lg cursor-pointer" on:click={() => changeMonth(-1)}
+        <span class="mx-2">{currentYear}年{currentMonth + 1}月</span>
+        <button class="pl-2 text-lg cursor-pointer" on:click={() => changeMonth(-1)}
           ><ChevronLeft /></button
         >
-        <span class="mx-2">{currentYear}年{currentMonth + 1}月</span>
+        <button class="px-2 text-lg cursor-pointer" on:click={() => changeMonth(1)}
+          ><ChevronRight /></button
+        >
         <button
           class="ml-2 px-2 py-1 border border-gray-400 rounded text-xs bg-white hover:bg-gray-50 cursor-pointer"
           on:click={scrollToCurrentMonth}
         >
           今月へ
         </button>
-        <button class="px-2 text-lg ml-auto cursor-pointer" on:click={() => changeMonth(1)}
-          ><ChevronRight /></button
-        >
       </div>
 
       <div bind:this={scrollContainer} class="px-2 bg-white" style="max-height:400px;">
@@ -296,7 +296,7 @@
           <div class="flex mb-1" class:selected={selectedWeekIndex === widx}>
             <!-- 週番号クリックで週選択 -->
             <button
-              class="w-12 text-right text-xs text-gray-500 pr-2 hover:underline focus:underline cursor-pointer"
+              class="w-12 text-center text-xs text-gray-500 hover:underline focus:underline cursor-pointer"
               style="min-width:3rem;"
               on:click={() => selectWeek(widx)}
               aria-label="週を選択"
@@ -355,6 +355,10 @@
           {:else}
             <div class="text-sm text-gray-400 text-center py-4">トレーニングが未登録です</div>
           {/if}
+        </div>
+      {:else}
+        <div class="text-center py-4 text-gray-400 text-sm">
+          週を選択するとその週のトレーニングを表示します💡
         </div>
       {/if}
 
