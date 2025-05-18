@@ -17,8 +17,11 @@
   const handleDndFinalize = (e) => (menus = e.detail.items);
 
   const saveTraining = async () => {
+    const jstDate = new Date();
+    jstDate.setMinutes(jstDate.getMinutes() - jstDate.getTimezoneOffset()); // JST補正
+
     const body = {
-      performedAt: new Date().toISOString(),
+      performedAt: jstDate.toISOString(),
       trainingMenus: filterEmptyMenus(menus).map((m, i) => ({
         displayOrder: i + 1,
         name: m.name,

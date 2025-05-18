@@ -82,7 +82,7 @@
     const jan1 = new Date(currentYear, 0, 1);
     // 1月1日を含む週の最初の日（その週の日曜）
     const firstWeekStart = new Date(jan1);
-    firstWeekStart.setDate(jan1.getDate() - jan1.getDay());
+    firstWeekStart.setDate(jan1.getDate() - ((jan1.getDay() + 6) % 7));
 
     return weeks.map((w, idx) => {
       // その週の最初の日（日曜）
@@ -99,7 +99,7 @@
     const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0);
 
     const startDate = new Date(firstDayOfMonth);
-    startDate.setDate(firstDayOfMonth.getDate() - firstDayOfMonth.getDay());
+    startDate.setDate(firstDayOfMonth.getDate() - ((firstDayOfMonth.getDay() + 6) % 7));
 
     weeks = [];
     let cur = new Date(startDate);
@@ -181,12 +181,12 @@
   const selectWeek = (weekIdx) => {
     selectedWeekIndex = weekIdx;
     const week = weeks[weekIdx];
-    // その週に該当するトレーニングを抽出
-    const start = week[0];
-    const end = week[6];
+    const start = toYmd(week[0]);
+    const end = toYmd(week[6]);
+
     selectedWeekTrainings = trainings.filter((t) => {
-      const d = new Date(t.performedAt);
-      return d >= start && d <= end;
+      const dateStr = toYmd(new Date(t.performedAt));
+      return dateStr >= start && dateStr <= end;
     });
   };
 
@@ -204,8 +204,6 @@
 
     setTimeout(() => {
       scrollToTop();
-
-      // ✅ 現在日が含まれる週を選択
       const todayIdx = weeks.findIndex((week) => week.some((day) => toYmd(day) === toYmd(today)));
       if (todayIdx !== -1) {
         selectWeek(todayIdx);
@@ -283,13 +281,13 @@
           <div class="w-12 pr-1"></div>
 
           <div class="grid grid-cols-7 text-xs text-center mb-2 w-full">
-            <div class="text-gray-400">日</div>
             <div class="text-gray-400">月</div>
             <div class="text-gray-400">火</div>
             <div class="text-gray-400">水</div>
             <div class="text-gray-400">木</div>
             <div class="text-gray-400">金</div>
             <div class="text-gray-400">土</div>
+            <div class="text-gray-400">日</div>
           </div>
         </div>
         {#each weeks as week, widx}
@@ -373,6 +371,7 @@
 {:else if selectedTab === 'group'}
   <div class="text-center py-12 text-gray-400 text-sm">グループ機能は現在準備中です💡</div>
 {/if}
+
 <!-- complete modal -->
 {#if showSavedMessage}
   <div
