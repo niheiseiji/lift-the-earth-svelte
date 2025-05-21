@@ -71,7 +71,7 @@
       <button
         on:click={openModal}
         class="mt-2 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600
-       bg-blue-700 hover:bg-blue-500"
+       bg-blue-700 hover:bg-blue-500 cursor-pointer"
       >
         編集
       </button>
@@ -124,13 +124,13 @@
           <button
             type="button"
             on:click={() => (showEditModal = false)}
-            class="text-sm text-gray-600"
+            class="text-sm text-gray-600 cursor-pointer"
           >
             キャンセル
           </button>
           <button
             type="submit"
-            class="text-sm text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded"
+            class="text-sm text-white bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded cursor-pointer"
           >
             保存
           </button>

@@ -143,14 +143,21 @@
     setTimeout(() => scrollToTop(), 10);
   };
 
-  // 今月へ
-  const scrollToCurrentMonth = () => {
+  // 今週へ
+  const scrollToCurrentWeek = () => {
     currentYear = today.getFullYear();
     currentMonth = today.getMonth();
     updateMonth();
-    selectedWeekIndex = null;
-    selectedWeekTrainings = [];
-    setTimeout(() => scrollToTop(), 10);
+
+    setTimeout(() => {
+      scrollToTop();
+
+      // 今週を選択状態にする
+      const todayIdx = weeks.findIndex((week) => week.some((day) => toYmd(day) === toYmd(today)));
+      if (todayIdx !== -1) {
+        selectWeek(todayIdx);
+      }
+    }, 10);
   };
 
   const scrollToTop = () => {
@@ -260,7 +267,7 @@
 {#if selectedTab === 'you'}
   <div class="flex min-h-full flex-col justify-center px-2 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md space-y-1">
-      <div class="flex items-center text-sm font-bold px-4 py-2 sticky top-0 bg-white z-10">
+      <div class="flex items-center text-sm font-bold px-4 py-2 sticky top-0 bg-white">
         <span class="mx-2">{currentYear}年{currentMonth + 1}月</span>
         <button class="pl-2 text-lg cursor-pointer" on:click={() => changeMonth(-1)}
           ><ChevronLeft /></button
@@ -270,9 +277,9 @@
         >
         <button
           class="ml-4 px-2 py-1 border border-gray-400 rounded text-xs bg-white hover:bg-gray-50 cursor-pointer"
-          on:click={scrollToCurrentMonth}
+          on:click={scrollToCurrentWeek}
         >
-          今月へ
+          今週へ
         </button>
       </div>
 
